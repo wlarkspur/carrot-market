@@ -16,7 +16,7 @@ const CommunityPostDetail: NextPage = () => {
         </div>
       </div>
       <div className="px-4">
-        <span className="mt-2 text-gray-700">
+        <span className="mt-2 text-gray-600">
           <span className="text-orange-500 font-medium">Q.</span> What is the
           best mandu restaurant?
         </span>
