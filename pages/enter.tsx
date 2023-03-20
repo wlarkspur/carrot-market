@@ -1,10 +1,8 @@
+import { cls } from "@/libs/utils";
+import type { NextPage } from "next";
 import { useState } from "react";
 
-function cls(...classnames: string[]) {
-  return classnames.join(" ");
-}
-
-export default function Enter() {
+const Enter: NextPage = () => {
   const [method, setMethod] = useState<"email" | "phone">("email");
   const onEmailClick = () => setMethod("email");
   const onPhoneClick = () => setMethod("phone");
@@ -111,4 +109,6 @@ export default function Enter() {
       </div>
     </div>
   );
-}
+};
+
+export default Enter;
