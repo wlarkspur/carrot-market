@@ -1,3 +1,4 @@
+import FloatingButton from "@/components/floating-button";
 import Layout from "@/components/layout";
 import type { NextPage } from "next";
 
@@ -59,7 +60,7 @@ const Home: NextPage = () => {
             </div>
           </div>
         ))}
-        <button className="fixed hover:bg-orange-500 transition-colors cursor-pointer bottom-24 right-5 bg-orange-400 rounded-full p-4 text-white shadow-xl">
+        <FloatingButton href="items/upload">
           <svg
             className="h-6 w-6"
             xmlns="http://www.w3.org/2000/svg"
@@ -75,7 +76,7 @@ const Home: NextPage = () => {
               d="M12 6v6m0 0v6m0-6h6m-6 0H6"
             />
           </svg>
-        </button>
+        </FloatingButton>
       </div>
     </Layout>
   );
