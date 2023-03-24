@@ -22,7 +22,7 @@ const Community: NextPage = () => {
             </span>
             <div className="mt-5 flex items-center justify-between w-full text-gray-500 font-medium text-xs">
               <span>니꼬</span>
-              <span>18시간 전</span>
+              <span>17시간 전</span>
             </div>
             <div className="flex space-x-5 mt-3 text-gray-700 py-2.5 border-t border-b-[2px] w-full">
               <span className="flex space-x-2 items-center text-sm">
