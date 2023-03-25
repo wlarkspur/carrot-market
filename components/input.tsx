@@ -4,6 +4,7 @@ interface InputProps {
   required: boolean;
   kind?: "text" | "phone" | "price";
   [key: string]: any;
+  //input에는 password, number, email, required 등 여러 종류의 prop을 보내야 할 수 있으니 이와 같이 코드를 명시해 놓는다.
 }
 
 export default function Input({
