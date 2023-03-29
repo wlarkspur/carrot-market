@@ -27,7 +27,7 @@ export default function Forms() {
   });
   const onValid = (data: LoginForm) => {
     console.log("im valid baby");
-    resetField("password");
+    setError("username", { message: "Taken username" });
   };
   const onInvalid = (errors: FieldErrors) => {
     console.log(errors);
