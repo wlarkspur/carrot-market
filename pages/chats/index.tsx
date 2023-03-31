@@ -13,7 +13,7 @@ const Chats: NextPage = () => {
               <div>
                 <p className="text-memidum  text-gray-700">Steve Jebs</p>
                 <p className="text-sm text-gray-500">
-                  See you tommorrow in the corner at 2pm!
+                  See you tommorrow in the corner at 2pm
                 </p>
               </div>
             </div>
