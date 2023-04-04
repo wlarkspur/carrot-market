@@ -61,7 +61,7 @@ const Enter: NextPage = () => {
               type="number"
               required
             />
-
+            {/* Loading은 useMutation 을 참조 */}
             <Button text={tokenLoading ? "Loading" : "Confirm Token"} />
           </form>
         ) : (
