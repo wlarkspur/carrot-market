@@ -11,7 +11,10 @@ async function handler(
   const profile = await client.user.findUnique({
     where: { id: req.session.user?.id },
   });
-  res.status(200).end();
+  res.json({
+    ok: true,
+    profile,
+  });
 }
 
 export default withApiSession(withHandler("GET", handler));
