@@ -4,7 +4,7 @@ import Layout from "@/components/layout";
 import useUser from "@/libs/client/useUser";
 import type { NextPage } from "next";
 import Head from "next/head";
-
+//Home , index
 const Home: NextPage = () => {
   const { user, isLoading } = useUser();
   console.log(user);
