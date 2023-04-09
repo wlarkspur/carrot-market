@@ -1,3 +1,5 @@
+import React from "react";
+
 interface TextAreaProps {
   label?: string;
   name?: string;
