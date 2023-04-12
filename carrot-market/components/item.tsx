@@ -16,7 +16,7 @@ export default function Item({
   comments,
 }: ItemProps) {
   return (
-    <Link href={`/items/${id}`}>
+    <Link href={`/products/${id}`}>
       <div className="flex px-4 border-b pb-4 cursor-pointer justify-between">
         <div className="flex space-x-4">
           <div className="w-20 h-20 bg-gray-400 rounded-md" />
