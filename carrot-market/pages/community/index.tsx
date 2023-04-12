@@ -1,11 +1,15 @@
 import FloatingButton from "@/components/floating-button";
 import Layout from "@/components/layout";
 import type { NextPage } from "next";
+import Head from "next/head";
 import Link from "next/link";
 
 const Community: NextPage = () => {
   return (
     <Layout title="community" hasTabBar>
+      <Head>
+        <title>Community</title>
+      </Head>
       <div className="py-16 px-4 space-y-8">
         {[1, 2, 3, 4, 5, 6].map((_, i) => (
           <Link

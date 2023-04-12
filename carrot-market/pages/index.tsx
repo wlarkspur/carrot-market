@@ -2,24 +2,32 @@ import FloatingButton from "@/components/floating-button";
 import Item from "@/components/item";
 import Layout from "@/components/layout";
 import useUser from "@/libs/client/useUser";
+import { Product } from "@prisma/client";
 import type { NextPage } from "next";
 import Head from "next/head";
+import useSWR from "swr";
 //Home , index
+interface ProductsResponse {
+  ok: boolean;
+  products: Product[];
+}
+
 const Home: NextPage = () => {
   const { user, isLoading } = useUser();
-  console.log(user);
+  const { data } = useSWR<ProductsResponse>("/api/products");
+  console.log(data);
   return (
     <Layout title="Home" hasTabBar>
       <Head>
         <title>Home</title>
       </Head>
-      <div className="flex flex-col space-y-5">
-        {[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map((_, i) => (
+      <div className="flex flex-col space-y-5 pt-3">
+        {data?.products?.map((product) => (
           <Item
-            key={i}
-            id={i}
-            title={"iPhone 14"}
-            price={99}
+            key={product.id}
+            id={product.id}
+            title={product.name}
+            price={product.price}
             hearts={1}
             comments={1}
           ></Item>

@@ -27,5 +27,5 @@ async function handler(
   res.json({ ok: true });
 }
 export default withApiSession(
-  withHandler({ method: "POST", handler, isPrivate: false })
+  withHandler({ methods: ["POST"], handler, isPrivate: false })
 );

@@ -1,11 +1,15 @@
 import FloatingButton from "@/components/floating-button";
 import Layout from "@/components/layout";
 import type { NextPage } from "next";
+import Head from "next/head";
 import Link from "next/link";
 
 const Live: NextPage = () => {
   return (
     <Layout title="live" hasTabBar>
+      <Head>
+        <title>Live</title>
+      </Head>
       <div className="py-10 divide-y-2 space-y-4">
         {[1, 2, 3, 4, 5].map((_, i) => (
           <Link href={`/live/${i}`} className="pt-4 px-4" key={i}>

@@ -1,10 +1,14 @@
 import Layout from "@/components/layout";
 import type { NextPage } from "next";
+import Head from "next/head";
 import Link from "next/link";
 
 const Profile: NextPage = () => {
   return (
     <Layout title="profile" hasTabBar>
+      <Head>
+        <title>Profile</title>
+      </Head>
       <div className="py-10 px-4">
         <div className="flex items-center space-x-3">
           <div className="w-16 h-16 bg-slate-300 rounded-full" />
