@@ -3,9 +3,10 @@ import { Product, User } from "@prisma/client";
 import type { NextPage } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import useSWR from "swr";
+import useSWR, { useSWRConfig } from "swr";
 import useMutation from "@/libs/client/useMutation";
 import { cls } from "@/libs/client/utils";
+import useUser from "@/libs/client/useUser";
 
 interface ProductWithUser extends Product {
   user: User;
@@ -19,12 +20,17 @@ interface ItemDetailResponse {
 }
 
 const ItemDetail: NextPage = () => {
+  const { user, isLoading } = useUser();
   const router = useRouter();
-  const { data, mutate } = useSWR<ItemDetailResponse>(
+  const { mutate } = useSWRConfig();
+  const { data, mutate: boundMutate } = useSWR<ItemDetailResponse>(
     router.query.id ? `/api/products/${router.query.id}` : null
   );
   const [toggleFav] = useMutation(`/api/products/${router.query.id}/fav`);
   const onFavClick = () => {
+    if (!data) return;
+    boundMutate((prev) => prev && { ...prev, isLiked: !prev.isLiked }, false);
+    //mutate("/api/users/me", (prev: any) => ({ ok: !prev.ok }), false);
     toggleFav({});
   };
   return (
@@ -65,7 +71,7 @@ const ItemDetail: NextPage = () => {
               <button
                 onClick={onFavClick}
                 className={cls(
-                  "p-3 rounded-md flex items-center justify-center",
+                  "p-3 rounded-md flex items-center justify-center hover:bg-gray-100",
                   data?.isLiked
                     ? "text-red-500  hover:text-red-600"
                     : "text-gray-400  hover:text-gray-500"

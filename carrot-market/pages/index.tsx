@@ -2,14 +2,21 @@ import FloatingButton from "@/components/floating-button";
 import Item from "@/components/item";
 import Layout from "@/components/layout";
 import useUser from "@/libs/client/useUser";
-import { Product } from "@prisma/client";
+import { Fav, Product } from "@prisma/client";
 import type { NextPage } from "next";
 import Head from "next/head";
 import useSWR from "swr";
 //Home , index
+
+interface ProductWithCount extends Product {
+  _count: {
+    favs: number;
+  };
+}
+
 interface ProductsResponse {
   ok: boolean;
-  products: Product[];
+  products: ProductWithCount[];
 }
 
 const Home: NextPage = () => {
@@ -28,7 +35,7 @@ const Home: NextPage = () => {
             id={product.id}
             title={product.name}
             price={product.price}
-            hearts={1}
+            hearts={product._count.favs}
             comments={1}
           ></Item>
         ))}
