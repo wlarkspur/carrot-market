@@ -1,3 +1,4 @@
+import { Answer } from "@prisma/client";
 import { withIronSessionApiRoute } from "iron-session/next";
 import { NextApiRequest, NextApiResponse } from "next";
 import withHandler, { ResponseType } from "@/libs/server/withHandlers";
@@ -10,50 +11,44 @@ async function handler(
 ) {
   const {
     query: { id },
+    session: { user },
+    body: { answer },
   } = req;
   const post = await client.post.findUnique({
     where: {
       id: +id!,
     },
-    include: {
-      user: {
-        select: {
-          id: true,
-          name: true,
-          avatar: true,
-        },
-      },
-      answers: {
-        select: {
-          answer: true,
-          id: true,
-          user: {
-            select: {
-              id: true,
-              name: true,
-              avatar: true,
-            },
-          },
-        },
-      },
-      _count: {
-        select: {
-          answers: true,
-          wondering: true,
-        },
-      },
+    select: {
+      id: true,
     },
   });
+
+  const newAnswer = await client.answer.create({
+    data: {
+      user: {
+        connect: {
+          id: user?.id,
+        },
+      },
+      post: {
+        connect: {
+          id: +id!,
+        },
+      },
+      answer,
+    },
+  });
+  console.log(newAnswer);
   if (!post) res.status(404).json({ ok: false, error: "Not found post" });
   res.json({
     ok: true,
-    post,
+    answer: newAnswer,
   });
 }
 
 export default withApiSession(
   withHandler({
-    methods: ["GET"],
+    methods: ["POST"],
     handler,
   })
 );
