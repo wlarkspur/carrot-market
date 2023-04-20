@@ -22,7 +22,7 @@ export default function Layout({
   };
   return (
     <div>
-      <div className="bg-white w-full h-12 max-w-xl flex justify-center text-lg px-8 font-medium  fixed text-gray-800 border-b top-0  items-center">
+      <div className="bg-white w-full h-12 max-w-xl flex justify-center text-lg px-8 font-semibold  fixed text-gray-800 border-b top-0  items-center">
         {canGoBack ? (
           <button onClick={onClick} className="absolute left-4">
             <svg
@@ -42,7 +42,7 @@ export default function Layout({
           </button>
         ) : null}
         {title ? (
-          <span className={cls(canGoBack ? "mx-auto" : "", "")}>{title}</span>
+          <span className={cls(canGoBack ? "mx-auto " : "", "")}>{title}</span>
         ) : null}
       </div>
       <div className={cls("pt-12", hasTabBar ? "pb-24" : "")}>{children}</div>
