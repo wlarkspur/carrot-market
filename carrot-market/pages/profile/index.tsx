@@ -5,7 +5,7 @@ import Link from "next/link";
 
 const Profile: NextPage = () => {
   return (
-    <Layout title="profile" hasTabBar>
+    <Layout title="Profile" hasTabBar>
       <Head>
         <title>Profile</title>
       </Head>
