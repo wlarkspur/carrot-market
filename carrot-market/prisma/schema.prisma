@@ -175,6 +175,7 @@ model Record {
   @@index([productId])
 }
 
+// Enum 이름은 반드시 단수명으로 사용되어야 한다.
 enum Kind {
   Purchase
   Sale
