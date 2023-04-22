@@ -103,6 +103,8 @@ model Wondering {
   @@index([postId])
 }
 
+//새로운 column 추가시 변수에 ?를 붙이거나 default 값을 넣어준다. 혹은 reset.
+
 model Review {
   id           Int      @id @default(autoincrement())
   createdAt    DateTime @default(now())
@@ -112,6 +114,7 @@ model Review {
   createdById  Int
   createdFor   User     @relation(name: "receivedReviews", fields: [createdForId], references: [id], onDelete: Cascade)
   createdForId Int
+  score        Int      @default(1)
 
   @@index([createdById])
   @@index([createdForId])
