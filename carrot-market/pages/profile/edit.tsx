@@ -1,10 +1,62 @@
+import Button from "@/components/button";
+import Input from "@/components/input";
 import Layout from "@/components/layout";
+import useMutation from "@/libs/client/useMutation";
+import useUser from "@/libs/client/useUser";
+import { spawn } from "child_process";
 import type { NextPage } from "next";
+import { useEffect } from "react";
+import { set, useForm } from "react-hook-form";
+
+interface EditProfileForm {
+  email?: string;
+  phone?: string;
+  name?: string;
+  formErrors?: string;
+}
+
+interface EditProfileResponse {
+  ok: boolean;
+  error?: string;
+}
 
 const EditProfile: NextPage = () => {
+  const { user } = useUser();
+  const {
+    register,
+    setValue,
+    handleSubmit,
+    setError,
+    formState: { errors },
+  } = useForm<EditProfileForm>();
+  useEffect(() => {
+    if (user?.name) setValue("name", user.name);
+    if (user?.email) setValue("email", user.email);
+    if (user?.phone) setValue("phone", user.phone);
+  }, [setValue, user]);
+  const [editProfile, { data, loading }] =
+    useMutation<EditProfileResponse>(`/api/users/me`);
+  const onValid = ({ email, phone, name }: EditProfileForm) => {
+    if (loading) return;
+    if (email === "" && phone === "" && name === "") {
+      return setError("formErrors", {
+        message: "Email or Phone number are required. You need to choose one.",
+      });
+    }
+    editProfile({
+      email,
+      phone,
+      name,
+    });
+  };
+  useEffect(() => {
+    if (data && !data.ok && data.error) {
+      setError("formErrors", { message: data.error });
+    }
+  }, [data, setError]);
   return (
     <Layout canGoBack>
-      <div className="py-10 px-4 space-y-4">
+      <form onSubmit={handleSubmit(onValid)} className="py-10 px-4 space-y-4">
         <div className="flex items-center space-x-3">
           <div className="w-14 h-14 rounded-full bg-slate-500" />
           <label
@@ -20,38 +72,38 @@ const EditProfile: NextPage = () => {
             />
           </label>
         </div>
-        <div className="space-y-1">
-          <label htmlFor="email" className="text-sm font-medium text-gray-700">
-            Email address
-          </label>
-          <input
-            id="email"
-            type="email"
-            className="appearance-none w-full px-3 py-2 border  border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-500  focus:border-orange-500"
-            required
-          />
-        </div>
-        <div className="space-y-1">
-          <label htmlFor="phone" className="text-sm font-medium text-gray-700">
-            Phone number
-          </label>
+        <Input
+          name="name"
+          label="Name"
+          kind="text"
+          type="text"
+          required={false}
+          register={register("name")}
+        />
+        <Input
+          name="email"
+          label="Email"
+          kind="text"
+          type="text"
+          required={false}
+          register={register("email")}
+        />
 
-          <div className="flex rounded-sm shadow-sm">
-            <span className="flex items-center justify-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 select-none text-sm">
-              +82
-            </span>
-            <input
-              id="phone"
-              type="number"
-              className="appearance-none w-full px-3 py-2 border  border-gray-300 rounded-md rounded-l-none shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-500  focus:border-orange-500"
-              required
-            />
-          </div>
-        </div>
-        <button className="mt-5 w-full bg-orange-500 hover:bg-orange-600 text-white py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 focus:outline-none">
-          Update profile
-        </button>
-      </div>
+        <Input
+          name="Phone"
+          label="Phone number"
+          kind="phone"
+          type="text"
+          register={register("phone")}
+          required={false}
+        />
+        {errors.formErrors ? (
+          <span className="my-3 text-red-500 font-medium text-center block">
+            {errors.formErrors.message}
+          </span>
+        ) : null}
+        <Button text={loading ? "Loading..." : "Update profile"} />
+      </form>
     </Layout>
   );
 };
