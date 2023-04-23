@@ -5,6 +5,7 @@ import useMutation from "@/libs/client/useMutation";
 import useUser from "@/libs/client/useUser";
 import { spawn } from "child_process";
 import type { NextPage } from "next";
+import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { set, useForm } from "react-hook-form";
 
@@ -21,6 +22,7 @@ interface EditProfileResponse {
 }
 
 const EditProfile: NextPage = () => {
+  const router = useRouter();
   const { user } = useUser();
   const {
     register,
@@ -28,6 +30,7 @@ const EditProfile: NextPage = () => {
     handleSubmit,
     setError,
     formState: { errors },
+    clearErrors,
   } = useForm<EditProfileForm>();
   useEffect(() => {
     if (user?.name) setValue("name", user.name);
@@ -43,20 +46,34 @@ const EditProfile: NextPage = () => {
         message: "Email or Phone number are required. You need to choose one.",
       });
     }
+
     editProfile({
       email,
       phone,
       name,
     });
   };
+
   useEffect(() => {
     if (data && !data.ok && data.error) {
       setError("formErrors", { message: data.error });
     }
   }, [data, setError]);
+  const onChange = () => {
+    clearErrors();
+  };
+  /* useEffect(() => {
+    if (data?.ok === true) {
+      router.push(`/profile`);
+    }
+  }, [data, router]); */
   return (
     <Layout canGoBack>
-      <form onSubmit={handleSubmit(onValid)} className="py-10 px-4 space-y-4">
+      <form
+        onChange={() => clearErrors()}
+        onSubmit={handleSubmit(onValid)}
+        className="py-10 px-4 space-y-4"
+      >
         <div className="flex items-center space-x-3">
           <div className="w-14 h-14 rounded-full bg-slate-500" />
           <label

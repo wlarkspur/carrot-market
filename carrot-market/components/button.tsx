@@ -2,6 +2,7 @@ import { cls } from "../libs/client/utils";
 
 interface ButtonProps {
   text: string;
+  [key: string]: any;
 }
 
 export default function Button({ text }: ButtonProps) {
