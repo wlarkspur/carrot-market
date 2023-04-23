@@ -99,7 +99,7 @@ const Profile: NextPage = () => {
             </span>
           </Link>
         </div>
-        {data?.reviews.map((review) => (
+        {data?.reviews?.map((review) => (
           <div key={review.id} className="mt-12">
             <div className="flex space-x-4 items-center">
               <div className="w-12 h-12 bg-slate-300 rounded-full" />
