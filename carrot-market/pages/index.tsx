@@ -8,7 +8,7 @@ import Head from "next/head";
 import useSWR from "swr";
 //Home , index
 
-interface ProductWithCount extends Product {
+export interface ProductWithCount extends Product {
   _count: {
     favs: number;
   };
