@@ -1,26 +1,32 @@
 import Layout from "@/components/layout";
 import Message from "@/components/messages";
+import { Stream } from "@prisma/client";
 import type { NextPage } from "next";
+import { useRouter } from "next/router";
+import useSWR from "swr";
+
+interface StreamResponse {
+  ok: true;
+  stream: Stream;
+}
 
 const Stream: NextPage = () => {
+  const router = useRouter();
+  const { data } = useSWR<StreamResponse>(
+    router.query.id ? `/api/streams/${router.query.id}` : null
+  );
   return (
     <Layout canGoBack>
       <div className="py-10 px-4 space-y-4">
         <div className="w-full rounded-md shadow-sm bg-slate-300 aspect-video  " />
-        <h3 className=" text-gray-800 font-semibold text-2xl mt-2">
-          Let&apos;s try potatos
-        </h3>
+        <h1 className=" text-gray-800 font-semibold text-3xl mt-2">
+          {data?.stream?.name}
+        </h1>
+        <span className="text-2xl mt-2 text-gray-900">
+          ${data?.stream?.price}
+        </span>
+        <p className="my-6 text-gray-700">{data?.stream?.description}</p>
         <div className="py-10 pb-16 h-[50vh] overflow-y-scroll space-y-4">
-          <Message message="Hi how much are you selling them for?" />
-          <Message reversed message="I want ￦20,000" />
-          <Message message="Hi how much are you selling them for?" />
-          <Message reversed message="I want ￦20,000" />
-          <Message message="Hi how much are you selling them for?" />
-          <Message reversed message="I want ￦20,000" />
-          <Message message="Hi how much are you selling them for?" />
-          <Message reversed message="I want ￦20,000" />
-          <Message message="Hi how much are you selling them for?" />
-          <Message reversed message="I want ￦20,000" />
           <Message message="Hi how much are you selling them for?" />
           <Message reversed message="I want ￦20,000" />
         </div>
