@@ -1,20 +1,61 @@
 import Layout from "@/components/layout";
 import Message from "@/components/messages";
+import useMutation from "@/libs/client/useMutation";
+import useUser from "@/libs/client/useUser";
 import { Stream } from "@prisma/client";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
+import { useEffect, useRef } from "react";
+import { useForm } from "react-hook-form";
 import useSWR from "swr";
+
+interface StreamMessage {
+  message: string;
+  id: number;
+  user: {
+    avatar?: string;
+    id: number;
+  };
+}
+
+interface StreamWithMessages extends Stream {
+  messages: StreamMessage[];
+}
 
 interface StreamResponse {
   ok: true;
-  stream: Stream;
+  stream: StreamWithMessages;
 }
 
-const Stream: NextPage = () => {
+interface MessageForm {
+  message: string;
+}
+
+const StreamMessage: NextPage = () => {
+  const { user } = useUser();
   const router = useRouter();
-  const { data } = useSWR<StreamResponse>(
+  const { register, handleSubmit, reset } = useForm<MessageForm>();
+  const { data, mutate } = useSWR<StreamResponse>(
     router.query.id ? `/api/streams/${router.query.id}` : null
   );
+  const [sendMessage, { loading, data: sendMessageData }] = useMutation(
+    `/api/streams/${router.query.id}/messages`
+  );
+  const onValid = (form: MessageForm) => {
+    if (loading) return;
+    reset();
+    sendMessage(form);
+  };
+  useEffect(() => {
+    if (sendMessageData && sendMessageData.ok) {
+      mutate(); //사용자가 메세지를 보낼 때마다 한번 더 fetch를 하게 됨.
+    }
+  }, [sendMessageData, mutate]);
+  //스크롤 맨 아래로 당기기
+  const scrollRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    scrollRef.current?.scrollIntoView();
+  }, []);
   return (
     <Layout canGoBack>
       <div className="py-10 px-4 space-y-4">
@@ -27,13 +68,23 @@ const Stream: NextPage = () => {
         </span>
         <p className="my-6 text-gray-700">{data?.stream?.description}</p>
         <div className="py-10 pb-16 h-[50vh] overflow-y-scroll space-y-4">
-          <Message message="Hi how much are you selling them for?" />
-          <Message reversed message="I want ￦20,000" />
+          {data?.stream.messages.map((message) => (
+            <Message
+              key={message.id}
+              message={message.message}
+              reversed={message.user.id === user?.id}
+            />
+          ))}
+          <div ref={scrollRef} />
         </div>
         <div className="fixed py-2 w-full mx-auto max-w-md bottom-2 inset-x-0">
-          <div className="flex relative items-center">
+          <form
+            onSubmit={handleSubmit(onValid)}
+            className="flex relative items-center"
+          >
             <input
               type="text"
+              {...register("message", { required: true })}
               className="shadow-sm rounded-full w-full border-gray-300 focus:ring-orange-500 focus:outline-none pr-12 focus:border-orange-500"
             />
             <div className="absolute inset-y-0 flex py-1.5 pr-1.5 right-0">
@@ -41,11 +92,11 @@ const Stream: NextPage = () => {
                 &rarr;
               </button>
             </div>
-          </div>
+          </form>
         </div>
       </div>
     </Layout>
   );
 };
 
-export default Stream;
+export default StreamMessage;
