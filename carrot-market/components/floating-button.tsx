@@ -8,7 +8,7 @@ interface FloatingButton {
 export default function FloatingButton({ children, href }: FloatingButton) {
   return (
     <Link href={href}>
-      <div className="fixed hover:bg-orange-500 transition-colors cursor-pointer bottom-24 right-5 bg-orange-400 rounded-full p-4 text-white shadow-xl">
+      <div className="fixed z-10 hover:bg-orange-500 transition-colors cursor-pointer bottom-24 right-5 bg-orange-400 rounded-full p-4 text-white shadow-xl">
         {children}
       </div>
     </Link>

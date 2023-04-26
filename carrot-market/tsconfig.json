@@ -20,4 +20,10 @@
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]
+  /* "ts-node": {
+    "compilerOptions": {
+      "module": "CommonJS"
+    }
+  } */
+  //package.json 에 있는 내용을 여기에서도 적용할 수 있음.
 }

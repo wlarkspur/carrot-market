@@ -36,7 +36,10 @@ const StreamMessage: NextPage = () => {
   const router = useRouter();
   const { register, handleSubmit, reset } = useForm<MessageForm>();
   const { data, mutate } = useSWR<StreamResponse>(
-    router.query.id ? `/api/streams/${router.query.id}` : null
+    router.query.id ? `/api/streams/${router.query.id}` : null,
+    {
+      refreshInterval: 1000,
+    }
   );
   const [sendMessage, { loading, data: sendMessageData }] = useMutation(
     `/api/streams/${router.query.id}/messages`
@@ -44,14 +47,30 @@ const StreamMessage: NextPage = () => {
   const onValid = (form: MessageForm) => {
     if (loading) return;
     reset();
+    mutate(
+      (prev) =>
+        prev &&
+        ({
+          ...prev,
+          stream: {
+            ...prev.stream,
+            messages: [
+              ...prev.stream.messages,
+              { id: Date.now(), message: form.message, user: { ...user } },
+            ],
+          },
+        } as any),
+      false
+    );
     sendMessage(form);
   };
-  useEffect(() => {
+
+  /* useEffect(() => {
     if (sendMessageData && sendMessageData.ok) {
       mutate(); //사용자가 메세지를 보낼 때마다 한번 더 fetch를 하게 됨.
     }
   }, [sendMessageData, mutate]);
-  //스크롤 맨 아래로 당기기
+  //스크롤 맨 아래로 당기기 */
   const scrollRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     scrollRef.current?.scrollIntoView();
