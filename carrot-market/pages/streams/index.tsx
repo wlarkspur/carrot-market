@@ -13,12 +13,12 @@ interface StreamsResponse {
   streams: Stream[];
 }
 
-/* backendpage = frontpage - 1
+/* backendPage = frontPage - 1
 
-pageSize = 25
+pageSize = 10
 
-take: 25
-skip: backendpage * 25 */
+take: 10
+skip: backendpage * 10 */
 
 const Streams: NextPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
