@@ -5,7 +5,8 @@ import { Stream } from "@prisma/client";
 import type { NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
-import { useState } from "react";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import useSWR from "swr";
 
 interface StreamsResponse {
@@ -13,17 +14,22 @@ interface StreamsResponse {
   streams: Stream[];
 }
 
-/* backendPage = frontPage - 1
-
-pageSize = 10
-
-take: 10
-skip: backendpage * 10 */
-
 const Streams: NextPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const { data } = useSWR<StreamsResponse>(`/api/streams`); // /api/streams?page=1
+  const router = useRouter();
+  const pageSize = 10;
 
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  const { data: initialData } = useSWR<StreamsResponse>(`/api/streams`);
+  const { data } = useSWR<StreamsResponse>(`/api/streams?page=${currentPage}`);
+  const totalPage = Math.ceil(
+    initialData?.streams ? initialData?.streams.length / pageSize : 0
+  );
+
+  console.log(initialData, "총 페이지수:", totalPage);
   return (
     <>
       <Layout title="Streams" hasTabBar>
@@ -41,7 +47,12 @@ const Streams: NextPage = () => {
               <h3 className=" text-gray-700 text-lg mt-2">{stream.name}</h3>
             </Link>
           ))}
-          <Pagination />
+          <Pagination
+            currentPage={currentPage}
+            handlePageChange={handlePageChange}
+            totalPage={totalPage}
+            pageSize={pageSize}
+          />
           <FloatingButton href={`/streams/create`}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
