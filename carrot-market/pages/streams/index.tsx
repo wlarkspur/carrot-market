@@ -16,7 +16,6 @@ interface StreamsResponse {
 
 const Streams: NextPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const router = useRouter();
   const pageSize = 10;
 
   const handlePageChange = (page: number) => {
