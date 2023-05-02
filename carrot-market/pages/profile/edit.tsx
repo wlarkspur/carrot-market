@@ -23,7 +23,6 @@ interface EditProfileResponse {
 }
 
 const EditProfile: NextPage = () => {
-  const router = useRouter();
   const { user } = useUser();
   const {
     register,
@@ -50,18 +49,21 @@ const EditProfile: NextPage = () => {
     if (avatar && avatar.length > 0 && user) {
       const { id, uploadURL } = await (await fetch(`/api/files`)).json();
       const form = new FormData();
+      22;
       form.append("file", avatar[0], user?.id + "");
-      await fetch(uploadURL, {
-        method: "POST",
-        body: form,
-      });
+      const request = await (
+        await fetch(uploadURL, {
+          method: "POST",
+          body: form,
+        })
+      ).json();
+      console.log(request);
       // upload file to CF URL
-      return;
       editProfile({
         email,
         phone,
         name,
-        //avatarUrl: CF URL
+        avatarId: id,
       });
     } else {
       editProfile({
