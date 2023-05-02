@@ -37,6 +37,10 @@ const EditProfile: NextPage = () => {
     if (user?.name) setValue("name", user.name);
     if (user?.email) setValue("email", user.email);
     if (user?.phone) setValue("phone", user.phone);
+    if (user?.avatar)
+      setAvatarPreview(
+        `https://imagedelivery.net/vb1hJxSPrA50SRWhJFXABQ/${user.avatar}/public`
+      );
   }, [setValue, user]);
   const [editProfile, { data, loading }] =
     useMutation<EditProfileResponse>(`/api/users/me`);
@@ -57,7 +61,8 @@ const EditProfile: NextPage = () => {
           body: form,
         })
       ).json();
-      console.log(request);
+      // method: "POST"를 명시적으로 해주는 코드 (Option)
+      console.log(id, uploadURL);
       // upload file to CF URL
       editProfile({
         email,
@@ -85,12 +90,12 @@ const EditProfile: NextPage = () => {
       router.push(`/profile`);
     }
   }, [data, router]); */
-  const [avatarPreview, setAvatarPreiview] = useState("");
+  const [avatarPreview, setAvatarPreview] = useState("");
   const avatar = watch("avatar");
   useEffect(() => {
     if (avatar && avatar.length > 0) {
       const file = avatar[0];
-      setAvatarPreiview(URL.createObjectURL(file));
+      setAvatarPreview(URL.createObjectURL(file));
     }
   }, [avatar]);
   return (
@@ -107,7 +112,7 @@ const EditProfile: NextPage = () => {
               className="w-14 h-14 rounded-full bg-slate-500"
             />
           ) : (
-            <img className="w-14 h-14 rounded-full bg-slate-500" />
+            <div className="w-14 h-14 rounded-full bg-slate-500" />
           )}
           <label
             htmlFor="picture"
