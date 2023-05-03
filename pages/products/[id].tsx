@@ -3,10 +3,11 @@ import { Product, User } from "@prisma/client";
 import type { NextPage } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import useSWR, { useSWRConfig } from "swr";
+import useSWR from "swr";
 import useMutation from "@/libs/client/useMutation";
 import { cls } from "@/libs/client/utils";
 import useUser from "@/libs/client/useUser";
+import { useEffect, useState } from "react";
 
 interface ProductWithUser extends Product {
   user: User;
@@ -22,7 +23,6 @@ interface ItemDetailResponse {
 const ItemDetail: NextPage = () => {
   const { user, isLoading } = useUser();
   const router = useRouter();
-  const { mutate } = useSWRConfig();
   const { data, mutate: boundMutate } = useSWR<ItemDetailResponse>(
     router.query.id ? `/api/products/${router.query.id}` : null
   );
@@ -33,13 +33,26 @@ const ItemDetail: NextPage = () => {
     //mutate("/api/users/me", (prev: any) => ({ ok: !prev.ok }), false);
     toggleFav({});
   };
+  const [photo, setPhoto] = useState();
+  useEffect(() => {}, [photo]);
+  console.log(data);
   return (
     <Layout canGoBack>
       <div className="px-4 py-10">
         <div className="mb-8">
-          <div className="h-96 bg-slate-300" />
+          <img
+            src={`https://imagedelivery.net/vb1hJxSPrA50SRWhJFXABQ/${data?.product.image}/public`}
+            className="h-96 bg-slate-300"
+          />
           <div className="flex cursor-pointer py-3 border-t border-b items-center space-x-3">
-            <div className="w-12 h-12 rounded-full bg-slate-300" />
+            {data?.product.user.avatar ? (
+              <img
+                src={`https://imagedelivery.net/vb1hJxSPrA50SRWhJFXABQ/${data?.product.user.avatar}/avatar`}
+                className="w-12 h-12 rounded-full bg-slate-300"
+              />
+            ) : (
+              <div className="w-12 h-12 rounded-full bg-slate-300" />
+            )}
             <div>
               <p className="text-sm font-medium text-gray-700">
                 {data?.product?.user?.name}

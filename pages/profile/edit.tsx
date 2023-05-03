@@ -55,14 +55,13 @@ const EditProfile: NextPage = () => {
       const form = new FormData();
       22;
       form.append("file", avatar[0], user?.id + "");
-      const request = await (
+      /* const request = await (
         await fetch(uploadURL, {
           method: "POST",
           body: form,
         })
-      ).json();
+      ).json(); */
       // method: "POST"를 명시적으로 해주는 코드 (Option)
-      console.log(id, uploadURL);
       // upload file to CF URL
       editProfile({
         email,
