@@ -8,6 +8,7 @@ import useMutation from "@/libs/client/useMutation";
 import { cls } from "@/libs/client/utils";
 import useUser from "@/libs/client/useUser";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 
 interface ProductWithUser extends Product {
   user: User;
@@ -40,13 +41,20 @@ const ItemDetail: NextPage = () => {
     <Layout canGoBack>
       <div className="px-4 py-10">
         <div className="mb-8">
-          <img
-            src={`https://imagedelivery.net/vb1hJxSPrA50SRWhJFXABQ/${data?.product.image}/public`}
-            className="h-96 bg-slate-300"
-          />
-          <div className="flex cursor-pointer py-3 border-t border-b items-center space-x-3">
+          <div className="relative pb-80">
+            <Image
+              src={`https://imagedelivery.net/vb1hJxSPrA50SRWhJFXABQ/${data?.product.image}/public`}
+              className=" bg-slate-300 object-cover"
+              fill
+              alt=""
+            />
+          </div>
+          <div className=" flex cursor-pointer py-3 border-t border-b items-center space-x-3">
             {data?.product.user.avatar ? (
-              <img
+              <Image
+                width={48}
+                height={48}
+                alt=""
                 src={`https://imagedelivery.net/vb1hJxSPrA50SRWhJFXABQ/${data?.product.user.avatar}/avatar`}
                 className="w-12 h-12 rounded-full bg-slate-300"
               />
