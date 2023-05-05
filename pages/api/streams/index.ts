@@ -33,7 +33,7 @@ async function handler(
         }
       )
     ).json();
-    console.log(url);
+
     const stream = await client.stream.create({
       data: {
         cloudflareId: uid,
