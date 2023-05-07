@@ -100,10 +100,10 @@ const StreamMessage: NextPage = () => {
                 </div>
                 <div className="flex flex-col items-start mt-1 ml-2 text-gray-600 font-bold text-[13px]">
                   <span className="flex items-center ml">
-                    {data?.stream.cloudflareUrl}
+                    {data?.stream?.cloudflareUrl}
                   </span>
                   <span className="flex items-center mt-1.5">
-                    {data?.stream.cloudflareKey}
+                    {data?.stream?.cloudflareKey}
                   </span>
                 </div>
               </div>
