@@ -6,6 +6,7 @@ import useMutation from "@/libs/client/useMutation";
 import { Product } from "@prisma/client";
 
 import type { NextPage } from "next";
+import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -59,7 +60,10 @@ const Upload: NextPage = () => {
       <form className="px-4 space-y-4 " onSubmit={handleSubmit(onValid)}>
         <div>
           {photoPreview ? (
-            <img
+            <Image
+              alt=""
+              width={1}
+              height={1}
               src={photoPreview}
               className="w-full text-gray-600  border-gray-300 h-46 rounded-md"
             />

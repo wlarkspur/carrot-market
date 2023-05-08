@@ -9,6 +9,7 @@ import { cls } from "@/libs/client/utils";
 import useUser from "@/libs/client/useUser";
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import Button from "@/components/button";
 
 interface ProductWithUser extends Product {
   user: User;
@@ -28,26 +29,37 @@ const ItemDetail: NextPage = () => {
     router.query.id ? `/api/products/${router.query.id}` : null
   );
   const [toggleFav] = useMutation(`/api/products/${router.query.id}/fav`);
+  //---------------------------------------------------------
+  const [chatOpen] = useMutation(`/api/chats/${router.query.id}`);
+  const chatOpenClick = () => {
+    console.log(chatOpen);
+  };
+  //-----------------------------------------------------------
+  // chatOpen 활용하여 챗 내용 POST 하기
   const onFavClick = () => {
     if (!data) return;
     boundMutate((prev) => prev && { ...prev, isLiked: !prev.isLiked }, false);
     //mutate("/api/users/me", (prev: any) => ({ ok: !prev.ok }), false);
     toggleFav({});
   };
-  const [photo, setPhoto] = useState();
-  useEffect(() => {}, [photo]);
+
   console.log(data);
   return (
     <Layout canGoBack>
       <div className="px-4 py-10">
         <div className="mb-8">
           <div className="relative pb-80">
-            <Image
-              src={`https://imagedelivery.net/vb1hJxSPrA50SRWhJFXABQ/${data?.product.image}/public`}
-              className=" bg-slate-300 object-cover"
-              fill
-              alt=""
-            />
+            {data?.product.image ? (
+              <Image
+                src={`https://imagedelivery.net/vb1hJxSPrA50SRWhJFXABQ/${data?.product?.image}/public`}
+                className=" bg-slate-300 object-cover"
+                priority={true}
+                fill
+                alt=""
+              />
+            ) : (
+              <div className=" bg-slate-300 object-cover"></div>
+            )}
           </div>
           <div className=" flex cursor-pointer py-3 border-t border-b items-center space-x-3">
             {data?.product.user.avatar ? (
@@ -86,9 +98,12 @@ const ItemDetail: NextPage = () => {
               {data ? data?.product?.description : "???"}
             </p>
             <div className="flex items-center justify-between space-x-2">
-              <button className="flex-1 bg-orange-500 text-white py-3 rounded-md font-bold  focus: outline-none focus:ring-2 focus:ring-offset-2 hover:bg-orange-700 focus:ring-orange-500">
-                Talk to seller
-              </button>
+              <Button
+                onCLick={chatOpenClick}
+                href={`/chats/${data?.product.id}`}
+                text="Talk to seller"
+              ></Button>
+
               <button
                 onClick={onFavClick}
                 className={cls(

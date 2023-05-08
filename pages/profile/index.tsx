@@ -4,6 +4,7 @@ import { cls } from "@/libs/client/utils";
 import { Review, User } from "@prisma/client";
 import type { NextPage } from "next";
 import Head from "next/head";
+import Image from "next/image";
 import Link from "next/link";
 import useSWR from "swr";
 
@@ -27,9 +28,12 @@ const Profile: NextPage = () => {
       <div className="py-10 px-4">
         <div className="flex items-center space-x-3">
           {user?.avatar ? (
-            <img
+            <Image
+              height={46}
+              width={46}
               src={`https://imagedelivery.net/vb1hJxSPrA50SRWhJFXABQ/${user?.avatar}/avatar`}
               className="w-16 h-16 bg-slate-300 rounded-full"
+              alt={""}
             />
           ) : (
             <div className="w-16 h-16 bg-slate-300 rounded-full" />
@@ -109,7 +113,13 @@ const Profile: NextPage = () => {
         {data?.reviews?.map((review) => (
           <div key={review.id} className="mt-12">
             <div className="flex space-x-4 items-center">
-              <div className="w-12 h-12 bg-slate-300 rounded-full" />
+              <Image
+                height={36}
+                width={36}
+                src={`https://imagedelivery.net/vb1hJxSPrA50SRWhJFXABQ/${review.createdBy.avatar}/avatar`}
+                className="w-12 h-12 bg-slate-300 rounded-full"
+                alt={""}
+              />
               <div>
                 <h4 className="text-sm font-bold text-gray-900">
                   {review.createdBy.name}
