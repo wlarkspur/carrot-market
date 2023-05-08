@@ -76,10 +76,19 @@ const StreamMessage: NextPage = () => {
   useEffect(() => {
     scrollRef.current?.scrollIntoView();
   }, []);
+
   return (
     <Layout canGoBack>
       <div className="py-10 px-4 space-y-4">
-        <div className="w-full rounded-md shadow-sm bg-slate-300 aspect-video  " />
+        {data?.stream.cloudflareId ? (
+          <iframe
+            className="w-full aspect-video rounded-md shadow-sm"
+            src={`https://iframe.videodelivery.net/${data?.stream.cloudflareId}`}
+            allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
+            allowFullScreen={true}
+          ></iframe>
+        ) : null}
+
         <div className="mt-5">
           <h1 className=" text-gray-800 font-semibold text-3xl mt-2">
             {data?.stream?.name}
@@ -88,7 +97,7 @@ const StreamMessage: NextPage = () => {
             ${data?.stream?.price}
           </span>
           <p className="my-6 text-gray-700">{data?.stream?.description}</p>
-          <div className="bg-orange-200 p-2 rounded-md flex flex-col space-y-2 overflow-scroll">
+          <div className="bg-orange-400 p-2 rounded-md flex flex-col space-y-2 overflow-scroll">
             <span className="font-bold text-gray-700">
               Stream Keys<span className="text-red-500">(secret)</span>
             </span>
@@ -98,7 +107,7 @@ const StreamMessage: NextPage = () => {
                   <span className="flex items-center">URL:</span>
                   <span className="flex items-center">Key:</span>
                 </div>
-                <div className="flex flex-col items-start mt-1 ml-2 text-gray-600 font-bold text-[13px]">
+                <div className="flex flex-col items-start mt-1 ml-2 text-gray-100 font-bold text-[13px]">
                   <span className="flex items-center ml">
                     {data?.stream?.cloudflareUrl}
                   </span>

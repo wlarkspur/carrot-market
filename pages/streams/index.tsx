@@ -4,6 +4,7 @@ import Pagination from "@/components/pagination";
 import { Stream } from "@prisma/client";
 import type { NextPage } from "next";
 import Head from "next/head";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -42,7 +43,16 @@ const Streams: NextPage = () => {
               className="pt-5 px-5"
               key={stream.id}
             >
-              <div className="w-full rounded-md shadow-sm bg-slate-300 aspect-video  " />
+              <div className="w-full relative overflow-hidden rounded-md shadow-sm bg-slate-300 aspect-video  ">
+                {stream.cloudflareId ? (
+                  <Image
+                    alt=""
+                    fill
+                    src={`https://videodelivery.net/${stream.cloudflareId}/thumbnails/thumbnail.jpg?time=68s&height=270`}
+                  />
+                ) : null}
+              </div>
+
               <h3 className=" text-gray-700 text-lg mt-2">{stream.name}</h3>
             </Link>
           ))}
