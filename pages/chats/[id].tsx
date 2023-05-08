@@ -1,6 +1,7 @@
 import Layout from "@/components/layout";
 import Message from "@/components/messages";
 import useMutation from "@/libs/client/useMutation";
+import useUser from "@/libs/client/useUser";
 import { Product, User } from "@prisma/client";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
@@ -11,11 +12,12 @@ interface chatResponse {
   ok: boolean;
   chatGet: {
     id: string;
+    userId: number;
     chat: string;
     productId: number;
     user: User;
     product: Product;
-  };
+  }[];
 }
 
 interface messageForm {
@@ -23,8 +25,11 @@ interface messageForm {
 }
 
 const ChatDetail: NextPage = () => {
+  const { user } = useUser();
   const router = useRouter();
-  const { data } = useSWR<chatResponse>(`/api/chats/${router.query.id}`);
+  const { data, mutate } = useSWR<chatResponse>(
+    `/api/chats/${router.query.id}`
+  );
   const { register, handleSubmit, reset } = useForm<messageForm>();
   const [sendChat, { loading, data: sendChatData }] = useMutation(
     `/api/chats/${router.query.id}/messages`
@@ -32,15 +37,20 @@ const ChatDetail: NextPage = () => {
   const onValid = (form: messageForm) => {
     if (loading) return;
     reset();
+
     sendChat(form);
   };
   console.log("API 데이터: ", data);
   return (
     <Layout canGoBack title={"Steve"}>
       <div className="py-10 px-4 space-y-4">
-        <Message message={"Hi how much are you selling them for?"} />
-        <Message message={data?.chatGet.chat + ""} reversed />
-
+        {data?.chatGet.map((message) =>
+          message.userId === user?.id ? (
+            <Message reversed message={message.chat + ""} key={message.id} />
+          ) : (
+            <Message message={message.chat + ""} key={message.id} />
+          )
+        )}
         <form
           onSubmit={handleSubmit(onValid)}
           className="fixed w-full mx-auto max-w-md bottom-2 inset-x-0"

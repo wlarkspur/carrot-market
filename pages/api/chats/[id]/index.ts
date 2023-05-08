@@ -9,14 +9,13 @@ async function handler(
 ) {
   const {
     query: { id },
-    body,
-    session: { user },
+    body: { productId },
   } = req;
-  const chatGet = await client.chat.findUnique({
+  const chatId = parseInt(id + "");
+  const chatGet = await client.chat.findMany({
     where: {
-      id: +id!,
+      id: productId,
     },
-    chat,
     include: {
       user: {
         select: {
