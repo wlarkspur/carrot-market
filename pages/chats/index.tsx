@@ -5,7 +5,6 @@ import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import useSWR from "swr";
-import Id from "../api/chats/[id]";
 
 interface userWithProduct extends Product {
   name: string;

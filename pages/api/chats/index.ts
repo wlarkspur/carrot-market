@@ -19,11 +19,6 @@ async function handler(
               id: user?.id,
             },
           },
-          /*  {
-            product: {
-              userId: user?.id,
-            },
-          }, */
         ],
       },
       include: {
