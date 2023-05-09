@@ -23,6 +23,7 @@ interface EditProfileResponse {
 }
 
 const EditProfile: NextPage = () => {
+  const router = useRouter();
   const { user } = useUser();
   const {
     register,
@@ -51,18 +52,21 @@ const EditProfile: NextPage = () => {
       });
     }
     if (avatar && avatar.length > 0 && user) {
-      const { id, uploadURL } = await (await fetch(`/api/files`)).json();
+      const { uploadURL } = await (await fetch(`/api/files`)).json();
       const form = new FormData();
-      22;
+
       form.append("file", avatar[0], user?.id + "");
-      /* const request = await (
+      const {
+        result: { id },
+      } = await (
         await fetch(uploadURL, {
           method: "POST",
           body: form,
         })
-      ).json(); */
+      ).json();
       // method: "POST"를 명시적으로 해주는 코드 (Option)
       // upload file to CF URL
+      console.log(id);
       editProfile({
         email,
         phone,
@@ -84,11 +88,11 @@ const EditProfile: NextPage = () => {
     }
   }, [data, setError]);
 
-  /* useEffect(() => {
+  useEffect(() => {
     if (data?.ok === true) {
       router.push(`/profile`);
     }
-  }, [data, router]); */
+  }, [data, router]);
   const [avatarPreview, setAvatarPreview] = useState("");
   const avatar = watch("avatar");
   useEffect(() => {

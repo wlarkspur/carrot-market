@@ -2,54 +2,63 @@ import Layout from "@/components/layout";
 import Message from "@/components/messages";
 import useMutation from "@/libs/client/useMutation";
 import useUser from "@/libs/client/useUser";
-import { Product, User } from "@prisma/client";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import useSWR from "swr";
 
-interface chatResponse {
-  ok: boolean;
-  chatGet: {
-    id: number;
-    userId: number;
-    chat: string;
-    productId: number;
-    user: User;
-    product: Product;
-    groupedChats: {
-      id: number;
-      productId: number;
-      chats: {
-        id: number;
-        userId: number;
-        chat: string;
-        productId: number;
-      }[];
-    };
-  }[];
+interface User {
+  id: number;
+  name: string;
+  avatar: string;
 }
 
-interface messageForm {
+interface Product {
+  id: number;
+  name: string;
+  user: User;
+}
+
+interface GroupedChat {
+  id: number;
+  productId: number;
+  chats: Chat[];
+}
+
+interface Chat {
+  id: number;
+  userId: number;
+  chat: string;
+  productId: number;
+  user: User;
+  product: Product;
+  groupedChats: GroupedChat[];
+}
+
+interface ChatResponse {
+  ok: boolean;
+  chatGet: Chat[];
+}
+
+interface MessageForm {
   chat: string;
 }
 
 const ChatDetail: NextPage = () => {
   const { user } = useUser();
   const router = useRouter();
-  const { data, mutate } = useSWR<chatResponse>(
+  const { data, mutate } = useSWR<ChatResponse>(
     router.query.id ? `/api/chats/${router.query.id}` : null
   );
-  const { register, handleSubmit, reset } = useForm<messageForm>();
+  const { register, handleSubmit, reset } = useForm<MessageForm>();
   const [sendChat, { loading, data: sendChatData }] = useMutation(
     `/api/chats/${router.query.id}/messages`
   );
-  const onValid = (form: messageForm) => {
-    if (loading) return;
+  const onValid = async (form: MessageForm) => {
     reset();
-    mutate();
     sendChat(form);
   };
+
   console.log("API 데이터: ", data);
   return (
     <Layout canGoBack title={"Steve"}>

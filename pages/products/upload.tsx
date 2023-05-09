@@ -31,12 +31,12 @@ const Upload: NextPage = () => {
   const onValid = async ({ name, price, description }: UploadProductForm) => {
     if (loading) return;
     if (photo && photo.length > 0) {
-      const { id, uploadURL } = await (await fetch(`/api/files`)).json();
+      const { uploadURL } = await (await fetch(`/api/files`)).json();
       const form = new FormData();
       form.append("file", photo[0], name);
-      /* const response = await (
-        await fetch(uploadURL, { method: "POST", body: form })
-      ).json(); */
+      const {
+        result: { id },
+      } = await (await fetch(uploadURL, { method: "POST", body: form })).json();
       uploadProduct({ name, price, description, photoId: id });
     } else {
       uploadProduct({ name, price, description });
