@@ -30,9 +30,20 @@ const ItemDetail: NextPage = () => {
   );
   const [toggleFav] = useMutation(`/api/products/${router.query.id}/fav`);
   //---------------------------------------------------------
-  const [chatOpen] = useMutation(`/api/chats/${router.query.id}`);
-  const chatOpenClick = () => {
-    console.log(chatOpen);
+  const [chatOpen] = useMutation(`/api/chats/${router.query.id}/openchat`);
+  const chatOpenClick = async () => {
+    const response = await fetch(`api/chats/${router.query.id}/openchat`, {
+      method: "POST",
+      body: JSON.stringify({
+        productId: router.query.id,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const chatresponse = await response.json();
+    chatOpen("product.id.tsx parts <-- moditfy");
+    console.log(chatresponse);
   };
   //-----------------------------------------------------------
   // chatOpen 활용하여 챗 내용 POST 하기
@@ -43,7 +54,6 @@ const ItemDetail: NextPage = () => {
     toggleFav({});
   };
 
-  console.log(data);
   return (
     <Layout canGoBack>
       <div className="px-4 py-10">

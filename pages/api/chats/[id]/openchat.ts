@@ -9,13 +9,17 @@ async function handler(
 ) {
   const {
     query: { id },
-    body: { chat },
+    body: { productId },
     session: { user },
   } = req;
 
-  const chatPost = await client.chat.create({
+  const chatPost = await client.groupedChat.create({
     data: {
-      chat: chat,
+      chats: {
+        connect: {
+          id: productId,
+        },
+      },
       user: {
         connect: {
           id: user?.id,
@@ -24,20 +28,6 @@ async function handler(
       product: {
         connect: {
           id: +id!,
-        },
-      },
-      groupedChats: {
-        create: {
-          product: {
-            connect: {
-              id: +id!,
-            },
-          },
-          user: {
-            connect: {
-              id: user?.id,
-            },
-          },
         },
       },
     },

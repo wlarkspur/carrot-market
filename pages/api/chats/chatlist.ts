@@ -10,12 +10,44 @@ async function handler(
   const {
     query: { id },
     body: { productId },
+    session: { user },
   } = req;
-  const chatGet = await client.chat.findMany({
-    where: {
-      id: productId,
-    },
+  const chatList = await client.groupedChat.findMany({
+    /* where: {
+      OR: [
+        {
+          user: {
+            id: user?.id,
+          },
+        },
+      ],
+    }, */
     include: {
+      product: {
+        select: {
+          name: true,
+          price: true,
+          user: {
+            select: {
+              chats: {
+                select: {
+                  chat: true,
+                  id: true,
+                  user: {
+                    select: {
+                      id: true,
+                      name: true,
+                      phone: true,
+                      email: true,
+                      avatar: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
       user: {
         select: {
           id: true,
@@ -23,37 +55,14 @@ async function handler(
           avatar: true,
         },
       },
-      product: {
-        select: {
-          id: true,
-          name: true,
-          user: {
-            select: {
-              id: true,
-              phone: true,
-              name: true,
-              avatar: true,
-            },
-          },
-        },
-      },
-      groupedChats: {
-        select: {
-          id: true,
-          productId: true,
-          chats: true,
-          user: true,
-        },
-      },
     },
   });
 
   res.json({
     ok: true,
-    chatGet,
+    chatList,
   });
 }
-
 export default withApiSession(
   withHandler({
     methods: ["GET"],

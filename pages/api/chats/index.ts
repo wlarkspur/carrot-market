@@ -19,11 +19,11 @@ async function handler(
               id: user?.id,
             },
           },
-          {
+          /*  {
             product: {
               userId: user?.id,
             },
-          },
+          }, */
         ],
       },
       include: {
@@ -32,9 +32,16 @@ async function handler(
             id: true,
             name: true,
             avatar: true,
+            chats: {
+              select: {
+                chat: true,
+                userId: true,
+                productId: true,
+              },
+            },
           },
         },
-        product: {
+        /* product: {
           select: {
             id: true,
             name: true,
@@ -45,7 +52,7 @@ async function handler(
               },
             },
           },
-        },
+        }, */
       },
     });
 
