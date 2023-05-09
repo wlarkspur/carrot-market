@@ -13,14 +13,11 @@ async function handler(
     } = req;
     const chatsGet = await client.chat.findMany({
       where: {
-        OR: [
-          {
-            user: {
-              id: user?.id,
-            },
-          },
-        ],
+        user: {
+          id: user?.id,
+        },
       },
+      distinct: ["productId"],
       include: {
         user: {
           select: {

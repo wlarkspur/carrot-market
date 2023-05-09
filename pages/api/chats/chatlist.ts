@@ -9,19 +9,14 @@ async function handler(
 ) {
   const {
     query: { id },
-    body: { productId },
+    body: { userId },
     session: { user },
   } = req;
   const chatList = await client.groupedChat.findMany({
-    /* where: {
-      OR: [
-        {
-          user: {
-            id: user?.id,
-          },
-        },
-      ],
-    }, */
+    where: {
+      productId: {},
+    },
+    distinct: ["productId"],
     include: {
       product: {
         select: {

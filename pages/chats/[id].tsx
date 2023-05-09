@@ -11,12 +11,22 @@ import useSWR from "swr";
 interface chatResponse {
   ok: boolean;
   chatGet: {
-    id: string;
+    id: number;
     userId: number;
     chat: string;
     productId: number;
     user: User;
     product: Product;
+    groupedChats: {
+      id: number;
+      productId: number;
+      chats: {
+        id: number;
+        userId: number;
+        chat: string;
+        productId: number;
+      }[];
+    };
   }[];
 }
 
@@ -28,7 +38,7 @@ const ChatDetail: NextPage = () => {
   const { user } = useUser();
   const router = useRouter();
   const { data, mutate } = useSWR<chatResponse>(
-    `/api/chats/${router.query.id}`
+    router.query.id ? `/api/chats/${router.query.id}` : null
   );
   const { register, handleSubmit, reset } = useForm<messageForm>();
   const [sendChat, { loading, data: sendChatData }] = useMutation(
@@ -37,7 +47,7 @@ const ChatDetail: NextPage = () => {
   const onValid = (form: messageForm) => {
     if (loading) return;
     reset();
-
+    mutate();
     sendChat(form);
   };
   console.log("API 데이터: ", data);

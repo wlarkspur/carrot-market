@@ -17,7 +17,7 @@ async function handler(
     data: {
       chats: {
         connect: {
-          id: productId,
+          id: +productId, // <-- + int변환 값 특정이유로 추가했음.
         },
       },
       user: {
