@@ -17,11 +17,6 @@ async function handler(
     try {
       const chatPost = await client.groupedChat.create({
         data: {
-          chats: {
-            connect: {
-              id: user?.id,
-            },
-          },
           user: {
             connect: {
               id: user?.id,
@@ -37,6 +32,7 @@ async function handler(
       console.log("POST 결과 값:", chatPost);
       res.json({
         ok: true,
+        chatPost,
       });
     } catch (error) {
       console.error("POST 요청 오류:", error);

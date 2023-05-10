@@ -14,38 +14,39 @@ async function handler(
   } = req;
   const chatGet = await client.chat.findMany({
     where: {
-      OR: [
-        {
-          product: {
-            id: +id!,
-          },
-        },
-        {
-          user: {
-            id: user?.id,
-          },
-        },
-      ],
+      product: {
+        id: +id!,
+      },
     },
-
-    include: {
+    distinct: ["productId"],
+    select: {
+      id: true,
+      productId: true,
       user: {
         select: {
           id: true,
+          phone: true,
+          email: true,
           name: true,
           avatar: true,
         },
       },
-      product: {
+      groupedChat: {
         select: {
           id: true,
-          name: true,
-          user: {
+          chats: {
             select: {
               id: true,
-              phone: true,
-              name: true,
-              avatar: true,
+              chat: true,
+              user: {
+                select: {
+                  id: true,
+                  name: true,
+                  avatar: true,
+                  createdAt: true,
+                  updatedAt: true,
+                },
+              },
             },
           },
         },

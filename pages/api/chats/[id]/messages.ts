@@ -9,11 +9,11 @@ async function handler(
 ) {
   const {
     query: { id },
-    body: { chat, productId, userId, groupedChatId },
+    body: { chat },
     session: { user },
   } = req;
 
-  const groupedChat = await client.groupedChat.create({
+  /* const groupedChatDepreciated = await client.groupedChat.create({
     data: {
       product: {
         connect: {
@@ -26,8 +26,32 @@ async function handler(
         },
       },
     },
-  });
+  }); */
 
+  const groupedChat = await client.groupedChat.findUnique({
+    where: {
+      id: Number(id),
+    },
+  });
+  let existingGroupedChat;
+  if (groupedChat) {
+    existingGroupedChat = groupedChat;
+  } else {
+    existingGroupedChat = await client.groupedChat.create({
+      data: {
+        product: {
+          connect: {
+            id: Number(id),
+          },
+        },
+        user: {
+          connect: {
+            id: user?.id,
+          },
+        },
+      },
+    });
+  }
   const chatPost = await client.chat.create({
     data: {
       chat: chat,
@@ -43,7 +67,7 @@ async function handler(
       },
       groupedChat: {
         connect: {
-          id: Number(id),
+          id: existingGroupedChat.id,
         },
       },
     },
