@@ -9,34 +9,48 @@ async function handler(
 ) {
   const {
     query: { id },
-    body: { productId },
+    body,
     session: { user },
   } = req;
 
-  const chatPost = await client.groupedChat.create({
-    data: {
-      chats: {
-        connect: {
-          id: +productId, // <-- + int변환 값 특정이유로 추가했음.
+  if (req.method === "POST") {
+    try {
+      const chatPost = await client.groupedChat.create({
+        data: {
+          chats: {
+            connect: {
+              id: user?.id,
+            },
+          },
+          user: {
+            connect: {
+              id: user?.id,
+            },
+          },
+          product: {
+            connect: {
+              id: Number(id),
+            },
+          },
         },
-      },
-      user: {
-        connect: {
-          id: user?.id,
-        },
-      },
-      product: {
-        connect: {
-          id: +id!,
-        },
-      },
-    },
-  });
-
-  res.json({
-    ok: true,
-    chatPost,
-  });
+      });
+      console.log("POST 결과 값:", chatPost);
+      res.json({
+        ok: true,
+      });
+    } catch (error) {
+      console.error("POST 요청 오류:", error);
+      res.status(500).json({
+        ok: false,
+        message: "Internal server error",
+      });
+    }
+  } else {
+    res.status(405).send({
+      message: "Only POST requests allowed",
+      ok: false,
+    });
+  }
 }
 
 export default withApiSession(

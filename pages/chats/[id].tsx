@@ -63,13 +63,14 @@ const ChatDetail: NextPage = () => {
   return (
     <Layout canGoBack title={"Steve"}>
       <div className="py-10 px-4 space-y-4">
-        {data?.chatGet.map((message) =>
+        {/* {data?.chatGet.map((message) =>
           message.userId === user?.id ? (
             <Message reversed message={message.chat + ""} key={message.id} />
           ) : (
             <Message message={message.chat + ""} key={message.id} />
           )
-        )}
+        )} */}
+        <p>현재 API 보수작업중 입니다.</p>
         <form
           onSubmit={handleSubmit(onValid)}
           className="fixed w-full mx-auto max-w-md bottom-2 inset-x-0"

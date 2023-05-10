@@ -228,7 +228,7 @@ model Chat {
   chat          String      @db.MediumText
   product       Product     @relation(fields: [productId], references: [id], onDelete: Cascade)
   productId     Int
-  groupChat     GroupedChat @relation(fields: [groupedChatId], references: [id], onDelete: Cascade)
+  groupedChat   GroupedChat @relation(fields: [groupedChatId], references: [id], onDelete: Cascade)
   groupedChatId Int
 
   @@index([userId])

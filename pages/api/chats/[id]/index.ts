@@ -50,20 +50,6 @@ async function handler(
           },
         },
       },
-      groupedChats: {
-        select: {
-          id: true,
-          productId: true,
-          chats: {
-            select: {
-              id: true,
-              userId: true,
-              chat: true,
-              productId: true,
-            },
-          },
-        },
-      },
     },
   });
 

@@ -22,29 +22,25 @@ interface ItemDetailResponse {
   isLiked: boolean;
 }
 
+interface postDataForm {
+  postData: string;
+}
+
 const ItemDetail: NextPage = () => {
   const { user, isLoading } = useUser();
   const router = useRouter();
   const { data, mutate: boundMutate } = useSWR<ItemDetailResponse>(
     router.query.id ? `/api/products/${router.query.id}` : null
   );
+
   const [toggleFav] = useMutation(`/api/products/${router.query.id}/fav`);
   //---------------------------------------------------------
-  const [chatOpen] = useMutation(`/api/chats/${router.query.id}/openchat`);
-  const chatOpenClick = async () => {
-    const response = await fetch(`api/chats/${router.query.id}/openchat`, {
-      method: "POST",
-      body: JSON.stringify({
-        productId: router.query.id,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const chatresponse = await response.json();
-    chatOpen("product.id.tsx parts <-- moditfy");
-    console.log(chatresponse);
-  };
+  const [chatOpen, { loading, data: chatOpenData }] = useMutation(
+    `/api/chats/${router.query.id}/openchat`
+  );
+  const chatOpenClick = async () => {};
+  console.log(`라우터 ${router.query.id}`);
+  console.log("챗오픈 로그:", { chatOpenData });
   //-----------------------------------------------------------
   // chatOpen 활용하여 챗 내용 POST 하기
   const onFavClick = () => {
@@ -110,7 +106,7 @@ const ItemDetail: NextPage = () => {
             <div className="flex items-center justify-between space-x-2">
               <Button
                 onCLick={chatOpenClick}
-                href={`/chats/${data?.product.id}`}
+                /* href={`/chats/${data?.product.id}`} */
                 text="Talk to seller"
               ></Button>
 
