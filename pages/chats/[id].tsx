@@ -11,28 +11,26 @@ interface User {
   id: number;
   name: string;
   avatar: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
-interface Product {
+interface ChatList {
   id: number;
-  name: string;
+  chat: string;
   user: User;
 }
 
-interface GroupedChat {
+interface GroupedChatWith {
   id: number;
-  productId: number;
-  chats: Chat[];
+  chats: ChatList[];
 }
 
 interface Chat {
   id: number;
-  userId: number;
-  chat: string;
   productId: number;
   user: User;
-  product: Product;
-  groupedChats: GroupedChat[];
+  groupedChat: GroupedChatWith;
 }
 
 interface ChatResponse {
@@ -59,18 +57,22 @@ const ChatDetail: NextPage = () => {
     sendChat(form);
   };
 
-  console.log("API 데이터: ", data);
+  console.log("API 데이터: ", data?.chatGet[0].groupedChat.chats);
   return (
     <Layout canGoBack title={"Steve"}>
       <div className="py-10 px-4 space-y-4">
-        {/* {data?.chatGet.map((message) =>
-          message.userId === user?.id ? (
-            <Message reversed message={message.chat + ""} key={message.id} />
+        {data?.chatGet[0].groupedChat.chats.map((message) =>
+          message.user.id === user?.id ? (
+            <Message reversed message={message.chat} key={message.id} />
           ) : (
-            <Message message={message.chat + ""} key={message.id} />
+            <Message message={message.chat} key={message.id} />
           )
-        )} */}
-        <p>현재 API 보수작업중 입니다.</p>
+        )}
+
+        <p className="fixed bottom-40 left-16 font-extrabold text-red-700 bg-slate-100 rounded-sm">
+          현재 SERVER & DB 보수 중 입니다.
+        </p>
+
         <form
           onSubmit={handleSubmit(onValid)}
           className="fixed w-full mx-auto max-w-md bottom-2 inset-x-0"
