@@ -70,7 +70,7 @@ const ChatDetail: NextPage = () => {
         )}
 
         <p className="fixed bottom-40 left-16 font-extrabold text-red-700 bg-slate-100 rounded-sm">
-          현재 SERVER & DB 보수 중 입니다.
+          현재 SERVER & DB 구현 중 입니다.
         </p>
 
         <form

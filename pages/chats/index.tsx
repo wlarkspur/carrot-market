@@ -2,6 +2,7 @@ import Layout from "@/components/layout";
 import { Chat, Product, User } from "@prisma/client";
 import type { NextPage } from "next";
 import Head from "next/head";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import useSWR from "swr";
@@ -60,7 +61,18 @@ const Chats: NextPage = () => {
           data.chatList.map((list) => (
             <Link href={`/chats/${list.productId}`} key={list.id}>
               <div className="flex cursor-pointer py-3 px-4 items-center space-x-3">
-                <div className="w-12 h-12 rounded-full bg-slate-300" />
+                {data?.chatList[0].user.avatar ? (
+                  <Image
+                    width={48}
+                    height={48}
+                    alt=""
+                    src={`https://imagedelivery.net/vb1hJxSPrA50SRWhJFXABQ/${data?.chatList[0].user.avatar}/avatar`}
+                    className="w-12 h-12 rounded-full bg-slate-300"
+                  />
+                ) : (
+                  <div className="w-12 h-12 rounded-full bg-slate-300" />
+                )}
+
                 <div>
                   <p className="text-memidum  text-gray-700">
                     {list.user.name}
