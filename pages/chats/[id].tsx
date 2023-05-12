@@ -57,17 +57,18 @@ const ChatDetail: NextPage = () => {
     sendChat(form);
   };
 
-  console.log("API 데이터: ", data?.chatGet[0].groupedChat.chats);
+  console.log("API 데이터: ", data);
   return (
     <Layout canGoBack title={"Steve"}>
       <div className="py-10 px-4 space-y-4">
-        {data?.chatGet[0].groupedChat.chats.map((message) =>
-          message.user.id === user?.id ? (
-            <Message reversed message={message.chat} key={message.id} />
-          ) : (
-            <Message message={message.chat} key={message.id} />
-          )
-        )}
+        {data?.chatGet[0] &&
+          data?.chatGet[0].groupedChat.chats.map((message) =>
+            message.user.id === user?.id ? (
+              <Message reversed message={message.chat} key={message.id} />
+            ) : (
+              <Message message={message.chat} key={message.id} />
+            )
+          )}
 
         <p className="fixed bottom-40 left-16 font-extrabold text-red-700 bg-slate-100 rounded-sm">
           현재 SERVER & DB 구현 중 입니다.

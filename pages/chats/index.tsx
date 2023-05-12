@@ -50,7 +50,7 @@ interface chatResponse {
 const Chats: NextPage = () => {
   const router = useRouter();
   const { data } = useSWR<chatResponse>(`/api/chats/chatlist/`);
-  console.log(data && data.chatList[0].product.user.chats);
+
   return (
     <Layout title="chats" hasTabBar>
       <Head>

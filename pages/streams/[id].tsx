@@ -107,7 +107,7 @@ const StreamMessage: NextPage = () => {
                   <span className="flex items-center">URL:</span>
                   <span className="flex items-center">Key:</span>
                 </div>
-                <div className="flex flex-col items-start mt-1 ml-2 text-gray-100 font-bold text-[13px]">
+                <div className="flex flex-col items-start  ml-2 text-gray-100 font-bold text-[13px]">
                   <span className="flex items-center ml">
                     {data?.stream?.cloudflareUrl}
                   </span>

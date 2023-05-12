@@ -13,6 +13,31 @@ async function handler(
     session: { user },
   } = req;
 
+  /*   const groupedChat = await client.groupedChat.findUnique({
+    where: {
+      id: Number(id),
+    },
+  });
+  let existingGroupedChat;
+  if (groupedChat) {
+    existingGroupedChat = groupedChat;
+  } else {
+    existingGroupedChat = await client.groupedChat.create({
+      data: {
+        product: {
+          connect: {
+            id: Number(id),
+          },
+        },
+        user: {
+          connect: {
+            id: user?.id,
+          },
+        },
+      },
+    });
+  } */
+  //update 통해서 groupedChat이 존재할 경우 update, 존재하지 않으면 create.
   if (req.method === "POST") {
     try {
       const chatPost = await client.groupedChat.create({

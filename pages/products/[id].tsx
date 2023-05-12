@@ -38,11 +38,14 @@ const ItemDetail: NextPage = () => {
   const [chatOpen, { loading, data: chatOpenData }] = useMutation(
     `/api/chats/${router.query.id}/openchat`
   );
-  const chatOpenClick = async () => {};
+  const chatOpenClick = async () => {
+    chatOpen({ productId: router.query.id });
+  };
   console.log(`라우터 ${router.query.id}`);
-  console.log("챗오픈 로그:", { chatOpenData });
+  console.log("챗오픈 로그:", { data });
+  console.log(chatOpenClick);
   //-----------------------------------------------------------
-  // chatOpen 활용하여 챗 내용 POST 하기
+
   const onFavClick = () => {
     if (!data) return;
     boundMutate((prev) => prev && { ...prev, isLiked: !prev.isLiked }, false);
@@ -61,6 +64,7 @@ const ItemDetail: NextPage = () => {
                 className=" bg-slate-300 object-cover"
                 priority={true}
                 fill
+                sizes=""
                 alt=""
               />
             ) : (
@@ -105,8 +109,8 @@ const ItemDetail: NextPage = () => {
             </p>
             <div className="flex items-center justify-between space-x-2">
               <Button
-                onCLick={chatOpenClick}
-                /* href={`/chats/${data?.product.id}`} */
+                onClick={chatOpenClick}
+                href={`/chats/${data?.product.id}`}
                 text="Talk to seller"
               ></Button>
 
