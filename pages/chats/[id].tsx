@@ -26,9 +26,23 @@ interface GroupedChatWith {
   chats: ChatList[];
 }
 
+interface Seller {
+  phone: number;
+  name: string;
+  avatar: string;
+}
+
+interface ProductList {
+  image: string;
+  name: string;
+  price: number;
+  user: Seller;
+}
+
 interface Chat {
   id: number;
   productId: number;
+  product: ProductList;
   user: User;
   groupedChat: GroupedChatWith;
 }
@@ -59,14 +73,23 @@ const ChatDetail: NextPage = () => {
 
   console.log("API 데이터: ", data);
   return (
-    <Layout canGoBack title={"Steve"}>
+    <Layout canGoBack title={data?.chatGet[0].product.user.name}>
       <div className="py-10 px-4 space-y-4">
         {data?.chatGet[0] &&
           data?.chatGet[0].groupedChat.chats.map((message) =>
             message.user.id === user?.id ? (
-              <Message reversed message={message.chat} key={message.id} />
+              <Message
+                avatarUrl={message.user.avatar}
+                reversed
+                message={message.chat}
+                key={message.id}
+              />
             ) : (
-              <Message message={message.chat} key={message.id} />
+              <Message
+                avatarUrl={message.user.avatar}
+                message={message.chat}
+                key={message.id}
+              />
             )
           )}
 

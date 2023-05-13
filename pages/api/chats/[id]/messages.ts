@@ -9,7 +9,7 @@ async function handler(
 ) {
   const {
     query: { id },
-    body: { chat },
+    body: { chat, productId },
     session: { user },
   } = req;
 
@@ -28,9 +28,11 @@ async function handler(
     },
   }); */
 
-  const groupedChat = await client.groupedChat.findUnique({
+  const groupedChat = await client.groupedChat.findFirst({
     where: {
-      id: Number(id),
+      product: {
+        id: productId,
+      },
     },
   });
   let existingGroupedChat;
@@ -41,7 +43,7 @@ async function handler(
       data: {
         product: {
           connect: {
-            id: Number(id),
+            id: Number(productId),
           },
         },
         user: {
@@ -62,7 +64,7 @@ async function handler(
       },
       product: {
         connect: {
-          id: +id!,
+          id: Number(id),
         },
       },
       groupedChat: {

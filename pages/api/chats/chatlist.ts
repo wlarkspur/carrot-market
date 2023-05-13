@@ -21,6 +21,7 @@ async function handler(
       product: {
         select: {
           name: true,
+          image: true,
           price: true,
           user: {
             select: {

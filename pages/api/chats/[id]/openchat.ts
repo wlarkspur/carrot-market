@@ -9,36 +9,25 @@ async function handler(
 ) {
   const {
     query: { id },
-    body,
+    body: { productId },
     session: { user },
   } = req;
 
-  /*   const groupedChat = await client.groupedChat.findUnique({
+  const existingChat = await client.groupedChat.findFirst({
     where: {
-      id: Number(id),
+      productId: Number(productId),
     },
   });
-  let existingGroupedChat;
-  if (groupedChat) {
-    existingGroupedChat = groupedChat;
-  } else {
-    existingGroupedChat = await client.groupedChat.create({
-      data: {
-        product: {
-          connect: {
-            id: Number(id),
-          },
-        },
-        user: {
-          connect: {
-            id: user?.id,
-          },
-        },
-      },
-    });
-  } */
+  console.log("중복 DB", existingChat);
   //update 통해서 groupedChat이 존재할 경우 update, 존재하지 않으면 create.
-  if (req.method === "POST") {
+  if (existingChat) {
+    res.status(400).json({
+      ok: false,
+      message: "Chatting for this product already exists",
+    });
+    return;
+  }
+  if (req.method === "POST" && !existingChat) {
     try {
       const chatPost = await client.groupedChat.create({
         data: {

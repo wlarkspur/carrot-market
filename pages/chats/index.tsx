@@ -66,7 +66,7 @@ const Chats: NextPage = () => {
                     width={48}
                     height={48}
                     alt=""
-                    src={`https://imagedelivery.net/vb1hJxSPrA50SRWhJFXABQ/${data?.chatList[0].user.avatar}/avatar`}
+                    src={`https://imagedelivery.net/vb1hJxSPrA50SRWhJFXABQ/${data?.chatList[0]?.product.image}/avatar`}
                     className="w-12 h-12 rounded-full bg-slate-300"
                   />
                 ) : (
@@ -75,10 +75,10 @@ const Chats: NextPage = () => {
 
                 <div>
                   <p className="text-memidum  text-gray-700">
-                    {list.user.name}
+                    {list.product.user.chats[0]?.user.name}
                   </p>
                   <p className="text-sm text-gray-500">
-                    {list.product.user.chats[0].chat}
+                    {list.product.user.chats[0]?.chat}
                   </p>
                   {/* {list.product.user.chats.map((chat) => (
                     <p key={chat.id} className="text-sm text-gray-500">
