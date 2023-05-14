@@ -28,12 +28,29 @@ async function handler(
           method: "POST",
           headers: {
             Authorization: `Bearer ${process.env.CF_STREAM_TOKEN}`,
+            "X-Auth-Email": "",
           },
           body: `{"meta": {"name":"${name}"},"recording": { "mode": "automatic", "timeoutSeconds": 10 }}`,
         }
       )
     ).json();
 
+    const {
+      result: { uid: videoUID },
+    } = await (
+      await fetch(
+        `https:////dash.cloudflare.com/api/v4/accounts/${process.env.CF_ID}/stream/live_inputs/${uid}/videos`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${process.env.CF_STREAM_TOKEN}`,
+            "X-Auth-Email": "",
+          },
+        }
+      )
+    ).json();
+    //dash.cloudflare.com/api/v4/accounts/<ACCOUNT_ID>/stream/live_inputs/<LIVE_INPUT_UID>/videos
+    console.log("video UID:", videoUID);
     const stream = await client.stream.create({
       data: {
         cloudflareId: uid,
@@ -49,7 +66,7 @@ async function handler(
         },
       },
     });
-    res.json({ ok: true, stream });
+    res.json({ ok: true, stream, videoUID });
   } else if (req.method === "GET") {
     if (!query.page) {
       const streams = await client.stream.findMany();

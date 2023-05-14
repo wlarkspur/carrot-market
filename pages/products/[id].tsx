@@ -41,9 +41,9 @@ const ItemDetail: NextPage = () => {
   const chatOpenClick = async () => {
     chatOpen({ productId: router.query.id });
   };
-  console.log(`라우터 ${router.query.id}`);
+
   console.log("챗오픈 로그:", { data });
-  console.log(chatOpenClick);
+
   //-----------------------------------------------------------
 
   const onFavClick = () => {
@@ -88,7 +88,7 @@ const ItemDetail: NextPage = () => {
                 {data?.product?.user?.name}
               </p>
               <Link
-                href={`/users/profiles/${data?.product?.user?.id}`}
+                href={`/profiles/${data?.product?.user?.id}`}
                 legacyBehavior
               >
                 <a className="text-xs- font-medium text-gray-500">

@@ -8,7 +8,12 @@ import { useRouter } from "next/router";
 import { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import useSWR from "swr";
-import streams from "../api/streams";
+import { Stream as CloudflareStream } from "@cloudflare/stream-react";
+import { METHODS } from "http";
+
+type StreamProps = {
+  src: string;
+};
 
 interface StreamMessage {
   message: string;
@@ -45,6 +50,7 @@ const StreamMessage: NextPage = () => {
   const [sendMessage, { loading, data: sendMessageData }] = useMutation(
     `/api/streams/${router.query.id}/messages`
   );
+
   const onValid = (form: MessageForm) => {
     if (loading) return;
     reset();
@@ -76,14 +82,19 @@ const StreamMessage: NextPage = () => {
   useEffect(() => {
     scrollRef.current?.scrollIntoView();
   }, []);
+  console.log(data?.stream.cloudflareId);
 
   return (
     <Layout canGoBack>
       <div className="py-10 px-4 space-y-4">
+        {/* <div className="w-full aspect-video rounded-md shadow-sm">
+          <CloudflareStream controls src={videoIdOrSignedUrl + ""} />
+        </div> */}
         {data?.stream.cloudflareId ? (
           <iframe
             className="w-full aspect-video rounded-md shadow-sm"
-            src={`https://iframe.videodelivery.net/${data?.stream.cloudflareId}`}
+            /* src={`https:/iframe.videodelivery.net/${data.stream.cloudflareId}`} */
+            src={`https://customer-hx1xo6tcm96ddn2o.cloudflarestream.com/${data.stream.cloudflareId}/iframe`}
             allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
             allowFullScreen={true}
           ></iframe>
