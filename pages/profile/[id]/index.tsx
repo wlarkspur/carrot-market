@@ -1,11 +1,12 @@
 import Layout from "@/components/layout";
 import useUser from "@/libs/client/useUser";
 import { cls } from "@/libs/client/utils";
-import { Review, User } from "@prisma/client";
+import { Product, Review, User } from "@prisma/client";
 import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import useSWR from "swr";
 
 interface ReviewWithUser extends Review {
@@ -17,22 +18,45 @@ interface ReviewsResponse {
   reviews: ReviewWithUser[];
 }
 
-const Profile: NextPage = () => {
+interface UserWithProducts extends User {
+  products: Product;
+}
+
+interface UserResponse {
+  ok: Boolean;
+  userList: UserWithProducts[];
+}
+
+const UserProfile: NextPage = () => {
+  const router = useRouter();
   const { user } = useUser();
-  const { data } = useSWR<ReviewsResponse>("/api/reviews");
-  console.log(data);
+  const { data } = useSWR<UserResponse>(`/api/users`);
+  const { data: reviewsData } = useSWR<ReviewsResponse>("/api/reviews");
+  const userAll = data?.userList;
+  //data?.userList[Number(router.query.id) - 1].avatar
+  // 위 코드는 db 에서 삭제되고 새로 추가 되는 시퀀스에 따라 오류가 날 확률이 있음.
   return (
-    <Layout title="Profile" hasTabBar>
+    <Layout title={`Profile`} hasTabBar>
       <Head>
         <title>Profile</title>
       </Head>
       <div className="py-10 px-4">
-        <div className="flex items-center space-x-3">
-          {user?.avatar ? (
+        <div className="flex items-center justify-start space-x-3">
+          {/* {data &&
+            userAll?.map((person) => (
+              <div className="w-16 h-16  text-gray-600" key={person.id}>
+                <span>
+                  {person.id === Number(router.query.id) ? person.name : null}
+                </span>
+              </div>
+            ))} */}
+          {data?.userList ? (
             <Image
               height={46}
               width={46}
-              src={`https://imagedelivery.net/vb1hJxSPrA50SRWhJFXABQ/${user?.avatar}/avatar`}
+              src={`https://imagedelivery.net/vb1hJxSPrA50SRWhJFXABQ/${
+                data?.userList[Number(router.query.id) - 1].avatar
+              }/avatar`}
               className="w-16 h-16 bg-slate-300 rounded-full"
               alt={""}
             />
@@ -40,12 +64,15 @@ const Profile: NextPage = () => {
             <div className="w-16 h-16 bg-slate-300 rounded-full" />
           )}
           <div className="flex flex-col">
-            <span className="font-medium text-gray-900">{user?.name}</span>
+            <span className="font-medium text-gray-900">
+              {data?.userList[Number(router.query.id) - 1].name}
+            </span>
             <Link href={`/profile/edit`}>
               <div className="text-sm text-gray-700">Edit profile &rarr;</div>
             </Link>
           </div>
         </div>
+
         <div className="mt-10 flex justify-around">
           <Link href="/profile/sold" className="flex flex-col items-center">
             <div className="w-14 h-14 text-white bg-orange-500 rounded-full flex justify-center items-center">
@@ -111,7 +138,7 @@ const Profile: NextPage = () => {
             </span>
           </Link>
         </div>
-        {data?.reviews?.map((review) => (
+        {reviewsData?.reviews?.map((review) => (
           <div key={review.id} className="mt-12">
             <div className="flex space-x-4 items-center">
               <Image
@@ -156,4 +183,4 @@ const Profile: NextPage = () => {
   );
 };
 
-export default Profile;
+export default UserProfile;
