@@ -9,6 +9,14 @@ import useSWR from "swr";
 
 interface User {
   id: number;
+  phone: string;
+  email: string;
+  name: string;
+  avatar: string;
+}
+
+interface User2 {
+  id: number;
   name: string;
   avatar: string;
   createdAt: string;
@@ -18,7 +26,7 @@ interface User {
 interface ChatList {
   id: number;
   chat: string;
-  user: User;
+  user: User2;
 }
 
 interface GroupedChatWith {
@@ -68,12 +76,35 @@ const ChatDetail: NextPage = () => {
   );
   const onValid = async (form: MessageForm) => {
     reset();
+    if (!data) return;
+
+    /* mutate(
+      (prev) =>
+        prev && {
+          ...prev,
+          chatGet: {
+            ...prev.chatGet,
+            groupedChat: {
+              ...prev.chatGet[0]?.groupedChat,
+              chats: [
+                ...prev.chatGet[0]?.groupedChat.chats,
+                {
+                  id: Date.now(),
+                  chat: form.chat,
+                  user: { ...user },
+                },
+              ],
+            },
+          },
+        },
+      false
+    ); */
     sendChat(form);
   };
 
-  console.log("API 데이터: ", data);
+  console.log("API 데이터: ", data?.chatGet[0]?.groupedChat.chats);
   return (
-    <Layout canGoBack title={data?.chatGet[0].product.user.name}>
+    <Layout canGoBack title={data?.chatGet[0]?.product.user.name}>
       <div className="py-10 px-4 space-y-4">
         {data?.chatGet[0] &&
           data?.chatGet[0].groupedChat.chats.map((message) =>

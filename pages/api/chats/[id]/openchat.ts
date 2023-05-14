@@ -38,9 +38,14 @@ async function handler(
           },
           product: {
             connect: {
-              id: Number(id),
+              id: Number(productId),
             },
           },
+          /* chats: {
+            connect: {
+              id: Number(productId),
+            },
+          }, */
         },
       });
       console.log("POST 결과 값:", chatPost);

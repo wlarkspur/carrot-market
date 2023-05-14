@@ -201,6 +201,7 @@ model Stream {
   cloudflareId  String    @default("")
   cloudflareUrl String    @default("")
   cloudflareKey String    @default("")
+  videoId       String    @default("")
 
   @@index([userId])
 }

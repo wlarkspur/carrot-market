@@ -18,7 +18,33 @@ async function handler(
     },
     distinct: ["productId"],
     include: {
+      chats: true,
       product: {
+        select: {
+          id: true,
+          image: true,
+          name: true,
+          price: true,
+          user: {
+            select: {
+              id: true,
+              phone: true,
+              name: true,
+              avatar: true,
+            },
+          },
+        },
+      },
+      user: {
+        select: {
+          id: true,
+          phone: true,
+          email: true,
+          name: true,
+          avatar: true,
+        },
+      },
+      /* product: {
         select: {
           name: true,
           image: true,
@@ -27,6 +53,7 @@ async function handler(
             select: {
               chats: {
                 select: {
+                  productId: true,
                   chat: true,
                   id: true,
                   user: {
@@ -50,7 +77,7 @@ async function handler(
           name: true,
           avatar: true,
         },
-      },
+      }, */
     },
   });
 

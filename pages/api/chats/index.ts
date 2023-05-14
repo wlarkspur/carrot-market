@@ -9,6 +9,7 @@ async function handler(
 ) {
   if (req.method === "GET") {
     const {
+      query: { id },
       session: { user },
     } = req;
     const chatsGet = await client.chat.findMany({
@@ -19,7 +20,7 @@ async function handler(
       },
       distinct: ["productId"],
       include: {
-        user: {
+        /* user: {
           select: {
             id: true,
             name: true,
@@ -32,8 +33,8 @@ async function handler(
               },
             },
           },
-        },
-        /* product: {
+        }, */
+        product: {
           select: {
             id: true,
             name: true,
@@ -43,8 +44,15 @@ async function handler(
                 avatar: true,
               },
             },
+            groupedChats: {
+              select: {
+                id: true,
+                productId: true,
+                chats: true,
+              },
+            },
           },
-        }, */
+        },
       },
     });
 

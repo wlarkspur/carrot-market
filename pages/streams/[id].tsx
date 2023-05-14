@@ -9,7 +9,6 @@ import { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import useSWR from "swr";
 import { Stream as CloudflareStream } from "@cloudflare/stream-react";
-import { METHODS } from "http";
 
 type StreamProps = {
   src: string;
@@ -82,19 +81,19 @@ const StreamMessage: NextPage = () => {
   useEffect(() => {
     scrollRef.current?.scrollIntoView();
   }, []);
-  console.log(data?.stream.cloudflareId);
-
+  console.log(data?.stream?.cloudflareId);
+  const videoId = `${data?.stream.cloudflareId}`;
   return (
     <Layout canGoBack>
       <div className="py-10 px-4 space-y-4">
         {/* <div className="w-full aspect-video rounded-md shadow-sm">
-          <CloudflareStream controls src={videoIdOrSignedUrl + ""} />
+          <CloudflareStream controls src={videoId} />
         </div> */}
-        {data?.stream.cloudflareId ? (
+        {data?.stream?.cloudflareId ? (
           <iframe
             className="w-full aspect-video rounded-md shadow-sm"
             /* src={`https:/iframe.videodelivery.net/${data.stream.cloudflareId}`} */
-            src={`https://customer-hx1xo6tcm96ddn2o.cloudflarestream.com/${data.stream.cloudflareId}/iframe`}
+            src={`https://iframe.videodelivery.net/${data?.stream.cloudflareId}`}
             allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
             allowFullScreen={true}
           ></iframe>
@@ -133,7 +132,7 @@ const StreamMessage: NextPage = () => {
         <div>
           <p className="font-bold text-3xl mb-2">Live Chat</p>
           <div className="py-10 pb-16 h-[50vh] overflow-y-scroll space-y-4 border-[3px] border-orange-400 rounded-md p-1">
-            {data?.stream.messages.map((message) => (
+            {data?.stream?.messages.map((message) => (
               <Message
                 key={message.id}
                 message={message.message}

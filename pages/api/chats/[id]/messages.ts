@@ -9,10 +9,12 @@ async function handler(
 ) {
   const {
     query: { id },
-    body: { chat, productId },
+    body: { chat },
     session: { user },
   } = req;
 
+  const productId = Number(id);
+  console.log(chat, productId);
   /* const groupedChatDepreciated = await client.groupedChat.create({
     data: {
       product: {
@@ -28,22 +30,20 @@ async function handler(
     },
   }); */
 
-  const groupedChat = await client.groupedChat.findFirst({
+  let existingGroupedChat = await client.groupedChat.findFirst({
     where: {
       product: {
         id: productId,
       },
     },
   });
-  let existingGroupedChat;
-  if (groupedChat) {
-    existingGroupedChat = groupedChat;
-  } else {
+
+  if (!existingGroupedChat) {
     existingGroupedChat = await client.groupedChat.create({
       data: {
         product: {
           connect: {
-            id: Number(productId),
+            id: productId,
           },
         },
         user: {
@@ -64,7 +64,7 @@ async function handler(
       },
       product: {
         connect: {
-          id: Number(id),
+          id: productId,
         },
       },
       groupedChat: {

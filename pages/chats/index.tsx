@@ -7,24 +7,29 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import useSWR from "swr";
 
-interface userWithProduct extends Product {
+interface UserDetail {
+  id: number;
+  phone: string;
+  name: string;
+  avatar: string;
+}
+
+interface userWithProduct {
+  id: number;
+  image: string;
   name: string;
   price: number;
-  user: {
-    chats: [
-      {
-        chat: string;
-        id: number;
-        user: {
-          id: number;
-          name: string;
-          phone: number;
-          email: string;
-          avatar: string;
-        };
-      }
-    ];
-  };
+  user: UserDetail;
+}
+
+interface Chatlist {
+  id: number;
+  createdAt: string;
+  updatedAt: string;
+  userId: number;
+  chat: string;
+  productId: number;
+  groupedChatId: number;
 }
 
 interface chatResponse {
@@ -35,8 +40,8 @@ interface chatResponse {
       createdAt: string;
       updatedAt: string;
       productId: number;
-      chatId: number;
       userId: number;
+      chats: Chatlist[];
       product: userWithProduct;
       user: {
         id: number;
@@ -61,12 +66,12 @@ const Chats: NextPage = () => {
           data.chatList.map((list) => (
             <Link href={`/chats/${list.productId}`} key={list.id}>
               <div className="flex cursor-pointer py-3 px-4 items-center space-x-3">
-                {data?.chatList[0].user.avatar ? (
+                {list.user.avatar ? (
                   <Image
                     width={48}
                     height={48}
                     alt=""
-                    src={`https://imagedelivery.net/vb1hJxSPrA50SRWhJFXABQ/${data?.chatList[0]?.product.image}/avatar`}
+                    src={`https://imagedelivery.net/vb1hJxSPrA50SRWhJFXABQ/${list.product.image}/avatar`}
                     className="w-12 h-12 rounded-full bg-slate-300"
                   />
                 ) : (
@@ -75,10 +80,10 @@ const Chats: NextPage = () => {
 
                 <div>
                   <p className="text-memidum  text-gray-700">
-                    {list.product.user.chats[0]?.user.name}
+                    {list.product.user.name}
                   </p>
                   <p className="text-sm text-gray-500">
-                    {list.product.user.chats[0]?.chat}
+                    {list.chats[list.chats.length - 1].chat}
                   </p>
                   {/* {list.product.user.chats.map((chat) => (
                     <p key={chat.id} className="text-sm text-gray-500">
