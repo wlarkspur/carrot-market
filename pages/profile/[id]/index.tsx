@@ -32,7 +32,15 @@ const UserProfile: NextPage = () => {
   const { user } = useUser();
   const { data } = useSWR<UserResponse>(`/api/users`);
   const { data: reviewsData } = useSWR<ReviewsResponse>("/api/reviews");
-  const userAll = data?.userList;
+  const findUser =
+    data && data?.userList.find((user) => user.id === Number(router.query.id));
+  console.log(findUser);
+  const chainAvatar = findUser ? (
+    findUser.avatar
+  ) : (
+    <div className="w-16 h-16 bg-slate-300 rounded-full" />
+  );
+  console.log("로그인 유저 정보", user);
   //data?.userList[Number(router.query.id) - 1].avatar
   // 위 코드는 db 에서 삭제되고 새로 추가 되는 시퀀스에 따라 오류가 날 확률이 있음.
   return (
@@ -52,11 +60,10 @@ const UserProfile: NextPage = () => {
             ))} */}
           {data?.userList ? (
             <Image
+              priority
               height={46}
               width={46}
-              src={`https://imagedelivery.net/vb1hJxSPrA50SRWhJFXABQ/${
-                data?.userList[Number(router.query.id) - 1].avatar
-              }/avatar`}
+              src={`https://imagedelivery.net/vb1hJxSPrA50SRWhJFXABQ/${chainAvatar}/avatar`}
               className="w-16 h-16 bg-slate-300 rounded-full"
               alt={""}
             />
@@ -64,12 +71,12 @@ const UserProfile: NextPage = () => {
             <div className="w-16 h-16 bg-slate-300 rounded-full" />
           )}
           <div className="flex flex-col">
-            <span className="font-medium text-gray-900">
-              {data?.userList[Number(router.query.id) - 1].name}
-            </span>
-            <Link href={`/profile/edit`}>
-              <div className="text-sm text-gray-700">Edit profile &rarr;</div>
-            </Link>
+            <span className="font-medium text-gray-900">{findUser?.name}</span>
+            {user?.id === findUser?.id ? (
+              <Link href={`/profile/edit`}>
+                <div className="text-sm text-gray-700">Edit profile &rarr;</div>
+              </Link>
+            ) : null}
           </div>
         </div>
 

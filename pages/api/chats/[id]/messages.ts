@@ -14,7 +14,7 @@ async function handler(
   } = req;
 
   const productId = Number(id);
-  console.log(chat, productId);
+
   /* const groupedChatDepreciated = await client.groupedChat.create({
     data: {
       product: {

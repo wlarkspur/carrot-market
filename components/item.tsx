@@ -19,6 +19,7 @@ export default function Item({ title, price, id, hearts, image }: ItemProps) {
               alt=""
               width={55}
               height={40}
+              style={{ objectFit: "fill" }}
               src={`https://imagedelivery.net/vb1hJxSPrA50SRWhJFXABQ/${image}/avatar`}
             />
           ) : (
