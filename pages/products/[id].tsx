@@ -155,13 +155,27 @@ const ItemDetail: NextPage = () => {
           <div className="grid mt-6 grid-cols-2 gap-4">
             {data?.relatedProducts.map((product) => (
               <Link href={`/products/${product.id}`} key={product.id}>
-                <div>
-                  <div className="h-56 w-wull mb-4 bg-slate-300" />
-                  <h3 className=" text-gray-700 -mb-1">{product.name}</h3>
-                  <span className="text-sm font-medium text-gray-900">
-                    ${product.price}
-                  </span>
-                </div>
+                {product ? (
+                  <div style={{ height: "200px" }}>
+                    <Image
+                      alt=""
+                      src={`https://imagedelivery.net/vb1hJxSPrA50SRWhJFXABQ/${product.image}/public`}
+                      width={400}
+                      height={200}
+                      style={{
+                        objectFit: "cover",
+                        height: "100%",
+                      }}
+                    />
+                  </div>
+                ) : (
+                  <div className="h-56 w-full mb-4 bg-slate-300" />
+                )}
+
+                <h3 className=" text-gray-700 -mb-1">{product.name}</h3>
+                <span className="text-sm font-medium text-gray-900">
+                  ${product.price}
+                </span>
               </Link>
             ))}
           </div>
