@@ -74,20 +74,23 @@ const ChatDetail: NextPage = () => {
   const [sendChat, { loading, data: sendChatData }] = useMutation(
     `/api/chats/${router.query.id}/messages`
   );
+  const groupedChatTree = data?.chatGet[0]?.groupedChat;
+  console.log({ ...groupedChatTree?.chats });
   const onValid = async (form: MessageForm) => {
     reset();
-    if (!data) return;
+    if (loading) return;
 
-    /* mutate(
-      (prev) =>
-        prev && {
-          ...prev,
+    mutate(
+      (data) =>
+        data &&
+        ({
+          ...data,
           chatGet: {
-            ...prev.chatGet,
+            ...data.chatGet,
             groupedChat: {
-              ...prev.chatGet[0]?.groupedChat,
+              ...groupedChatTree,
               chats: [
-                ...prev.chatGet[0]?.groupedChat.chats,
+                { ...groupedChatTree?.chats },
                 {
                   id: Date.now(),
                   chat: form.chat,
@@ -96,9 +99,9 @@ const ChatDetail: NextPage = () => {
               ],
             },
           },
-        },
+        } as any),
       false
-    ); */
+    );
     sendChat(form);
   };
 
@@ -106,8 +109,8 @@ const ChatDetail: NextPage = () => {
   return (
     <Layout canGoBack title={data?.chatGet[0]?.product.user.name}>
       <div className="py-10 px-4 space-y-4">
-        {data?.chatGet[0] &&
-          data?.chatGet[0].groupedChat.chats.map((message) =>
+        {groupedChatTree &&
+          groupedChatTree.chats.map((message) =>
             message.user.id === user?.id ? (
               <Message
                 avatarUrl={message.user.avatar}
@@ -125,7 +128,7 @@ const ChatDetail: NextPage = () => {
           )}
 
         <p className="fixed bottom-40 left-16 font-extrabold text-red-700 bg-slate-100 rounded-sm">
-          현재 SERVER & DB 구현 중 입니다.
+          실시간 채팅 기능 test...
         </p>
 
         <form
