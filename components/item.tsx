@@ -19,8 +19,9 @@ export default function Item({ title, price, id, hearts, image }: ItemProps) {
               alt=""
               width={55}
               height={40}
-              style={{ objectFit: "fill" }}
+              style={{ objectFit: "fill", width: "auto", height: "auto" }}
               src={`https://imagedelivery.net/vb1hJxSPrA50SRWhJFXABQ/${image}/avatar`}
+              priority
             />
           ) : (
             <div className="w-20 h-20 bg-gray-400 rounded-md" />

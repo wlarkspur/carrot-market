@@ -5,7 +5,6 @@ import useUser from "@/libs/client/useUser";
 import { Fav, Product } from "@prisma/client";
 import type { NextPage } from "next";
 import Head from "next/head";
-import Image from "next/image";
 import useSWR from "swr";
 
 //Home , index
