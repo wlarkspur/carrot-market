@@ -3,6 +3,6 @@ import { NextRequest, NextResponse } from "next/server";
 
 export function middleware(req: NextRequest, res: NextResponse) {
   if (req.nextUrl.pathname.startsWith("/chats")) {
-    console.log(req);
+    console.log("CHATS MIDDLEWARE");
   }
 }
