@@ -1,4 +1,3 @@
-import Button from "@/components/button";
 import Input from "@/components/input";
 import useMutation from "@/libs/client/useMutation";
 import { cls } from "@/libs/client/utils";
@@ -6,6 +5,10 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import dynamic from "next/dynamic";
+
+const Bs = dynamic(() => import("@/components/bs"), { ssr: false });
+const ButtonDynamic = dynamic(() => import("@/components/button"));
 
 interface EnterForm {
   email?: string;
@@ -69,7 +72,7 @@ const Enter: NextPage = () => {
               required
             />
             {/* Loading은 useMutation 을 참조 */}
-            <Button text={tokenLoading ? "Loading" : "Confirm Token"} />
+            <ButtonDynamic text={tokenLoading ? "Loading" : "Confirm Token"} />
           </form>
         ) : (
           <>
@@ -118,23 +121,28 @@ const Enter: NextPage = () => {
                 />
               ) : null}
               {method === "phone" ? (
-                <Input
-                  register={register("phone", {
-                    required: true,
-                  })}
-                  name="phone"
-                  label="Phone number"
-                  type="number"
-                  kind="phone"
-                  required
-                />
+                <>
+                  <Bs />
+                  <Input
+                    register={register("phone", {
+                      required: true,
+                    })}
+                    name="phone"
+                    label="Phone number"
+                    type="number"
+                    kind="phone"
+                    required
+                  />
+                </>
               ) : null}
 
               {method === "email" ? (
-                <Button text={loading ? "loading" : "Get login link"} />
+                <ButtonDynamic text={loading ? "loading" : "Get login link"} />
               ) : null}
               {method === "phone" ? (
-                <Button text={loading ? "Loading" : "Get one-time Password"} />
+                <ButtonDynamic
+                  text={loading ? "Loading" : "Get one-time Password"}
+                />
               ) : null}
             </form>
           </>
