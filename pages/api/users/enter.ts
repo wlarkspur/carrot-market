@@ -2,9 +2,6 @@ import { NextApiRequest, NextApiResponse } from "next";
 import withHandler, { ResponseType } from "@/libs/server/withHandlers";
 import client from "@/libs/server/client";
 import twilio from "twilio";
-import SMTPTransport from "nodemailer/lib/smtp-transport";
-import Transporter from "@/libs/server/email";
-import smtpTransport from "@/libs/server/email";
 
 const twilioClient = twilio(process.env.TWILIO_SID, process.env.TWILIO_TOKEN);
 
