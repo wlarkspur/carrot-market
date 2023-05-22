@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form";
 import dynamic from "next/dynamic";
 
 const Bs = dynamic(
+  //@ts-ignore
   () =>
     new Promise((resolve) =>
       setTimeout(() => resolve(import("@/components/bs")), 10000)

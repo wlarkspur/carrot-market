@@ -21,7 +21,7 @@ class CustomDocument extends Document {
       <Html lang="ko">
         <Head>
           <link
-            href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap"
+            href="https://fonts.googleapis.com/css2?family=Open+Sans:ital@1&display=swap"
             rel="stylesheet"
           />
         </Head>
