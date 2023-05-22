@@ -3,11 +3,17 @@ import useMutation from "@/libs/client/useMutation";
 import { cls } from "@/libs/client/utils";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import dynamic from "next/dynamic";
 
-const Bs = dynamic(() => import("@/components/bs"), { ssr: false });
+const Bs = dynamic(
+  () =>
+    new Promise((resolve) =>
+      setTimeout(() => resolve(import("@/components/bs")), 10000)
+    ),
+  { ssr: false, suspense: true }
+);
 const ButtonDynamic = dynamic(() => import("@/components/button"));
 
 interface EnterForm {
@@ -122,7 +128,10 @@ const Enter: NextPage = () => {
               ) : null}
               {method === "phone" ? (
                 <>
-                  <Bs />
+                  <Suspense fallback={<button>loading!!</button>}>
+                    <Bs />
+                  </Suspense>
+
                   <Input
                     register={register("phone", {
                       required: true,

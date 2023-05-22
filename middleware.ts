@@ -9,7 +9,7 @@ export function middleware(req: NextRequest, res: NextResponse) {
   if (isBot) {
     return new Response("Plz fuck off Bot", { status: 403 });
   }
-  console.log(res);
+
   if (!req.cookies.has("carrotsession") && !req.url.includes("/enter")) {
     req.nextUrl.searchParams.set("from", req.nextUrl.pathname);
     req.nextUrl.pathname = "/enter";
