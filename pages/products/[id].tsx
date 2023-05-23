@@ -6,8 +6,6 @@ import { useRouter } from "next/router";
 import useSWR from "swr";
 import useMutation from "@/libs/client/useMutation";
 import { cls } from "@/libs/client/utils";
-import useUser from "@/libs/client/useUser";
-import { useEffect, useState } from "react";
 import Image from "next/image";
 import Button from "@/components/button";
 
@@ -27,7 +25,6 @@ interface postDataForm {
 }
 
 const ItemDetail: NextPage = () => {
-  const { user, isLoading } = useUser();
   const router = useRouter();
   const { data, mutate: boundMutate } = useSWR<ItemDetailResponse>(
     router.query.id ? `/api/products/${router.query.id}` : null
@@ -54,7 +51,7 @@ const ItemDetail: NextPage = () => {
   };
 
   return (
-    <Layout canGoBack>
+    <Layout canGoBack seoTitle="Product Detail">
       <div className="px-4 py-10">
         <div className="mb-8">
           <div className="relative pb-80">
