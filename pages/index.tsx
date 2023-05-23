@@ -6,6 +6,7 @@ import { Fav, Product } from "@prisma/client";
 import type { NextPage } from "next";
 import Head from "next/head";
 import useSWR from "swr";
+import client from "@/libs/server/client";
 
 //Home , index
 
@@ -20,23 +21,23 @@ interface ProductsResponse {
   products: ProductWithCount[];
 }
 
-const Home: NextPage = () => {
+const Home: NextPage<{ products: ProductWithCount[] }> = ({ products }) => {
   const { user, isLoading } = useUser();
-  const { data } = useSWR<ProductsResponse>("/api/products");
-  console.log(data);
+  //const { data } = useSWR<ProductsResponse>("/api/products");
+
   return (
-    <Layout title="Home" hasTabBar>
+    <Layout seoTitle="Home" title="Home" hasTabBar>
       <Head>
         <title>Home</title>
       </Head>
       <div className="flex flex-col space-y-5 pt-3">
-        {data?.products?.map((product) => (
+        {products?.map((product) => (
           <Item
             key={product.id}
             id={product.id}
             title={product.name}
             price={product.price}
-            hearts={product._count.favs}
+            hearts={product._count?.favs}
             image={product.image}
           ></Item>
         ))}
@@ -61,5 +62,16 @@ const Home: NextPage = () => {
     </Layout>
   );
 };
+//서버사이드 렌더링
+//아래와 같이 서버에서 데이터를 불러오면 SWR 새로고침 기능을 쓸 수 없게 된다; 어떻게 서버단에서 rendering과 SWR을 합칠 수 있을까?
+export async function getServerSideProps() {
+  const products = await client.product.findMany({});
+  console.log(products);
+  return {
+    props: {
+      products: JSON.parse(JSON.stringify(products)),
+    },
+  };
+}
 
 export default Home;
