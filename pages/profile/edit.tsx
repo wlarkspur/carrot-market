@@ -5,6 +5,7 @@ import useMutation from "@/libs/client/useMutation";
 import useUser from "@/libs/client/useUser";
 import { spawn } from "child_process";
 import type { NextPage } from "next";
+import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { set, useForm } from "react-hook-form";
@@ -102,7 +103,7 @@ const EditProfile: NextPage = () => {
     }
   }, [avatar]);
   return (
-    <Layout canGoBack>
+    <Layout canGoBack seoTitle="Edit Profile">
       <form
         onChange={() => clearErrors()}
         onSubmit={handleSubmit(onValid)}
@@ -110,7 +111,9 @@ const EditProfile: NextPage = () => {
       >
         <div className="flex items-center space-x-3">
           {avatarPreview ? (
-            <img
+            <Image
+              alt=""
+              priority
               src={avatarPreview}
               className="w-14 h-14 rounded-full bg-slate-500"
             />
