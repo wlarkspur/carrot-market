@@ -57,10 +57,10 @@ const Chats: NextPage = () => {
   const { data } = useSWR<chatResponse>(`/api/chats/chatlist/`);
 
   return (
-    <Layout title="chats" hasTabBar>
-      <Head>
+    <Layout seoTitle="Chats" hasTabBar>
+      {/* <Head>
         <title>Chats</title>
-      </Head>
+      </Head> */}
       <div className="py-10 divide-y-[1px]">
         {data &&
           data.chatList.map((list) => (

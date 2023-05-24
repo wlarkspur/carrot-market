@@ -9,7 +9,7 @@ interface LayoutProps {
   canGoBack?: boolean;
   hasTabBar?: boolean;
   children: React.ReactNode;
-  seoTitle: string;
+  seoTitle?: string;
 }
 
 export default function Layout({
@@ -23,10 +23,11 @@ export default function Layout({
   const onClick = () => {
     router.back();
   };
+  const titleMessage = `${seoTitle} | Carrot market`;
   return (
     <div>
       <Head>
-        <title>{seoTitle} | Carrot market</title>
+        <title>{titleMessage}</title>
       </Head>
       <div className="  w-full h-12 max-w-xl flex justify-center text-lg px-8 font-semibold  fixed text-gray-800  top-0  items-center">
         {canGoBack ? (
