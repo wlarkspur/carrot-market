@@ -49,8 +49,8 @@ const Community: NextPage = () => {
             <div className="mt-5 flex items-center justify-between w-full text-gray-500 font-medium text-xs">
               <span>{post.user.name}</span>
               <span>{post.createdAt + ""}</span>
-              <span>{post.latitude}</span>
-              <span>{post.longitude}</span>
+              {/* <span>{post.latitude}</span>
+              <span>{post.longitude}</span> */}
             </div>
             <div className="flex space-x-5 mt-3 text-gray-700 py-2.5 border-t border-b-[2px] w-full">
               <span className="flex space-x-2 items-center text-sm">
