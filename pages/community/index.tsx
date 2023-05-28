@@ -1,6 +1,7 @@
 import FloatingButton from "@/components/floating-button";
 import Layout from "@/components/layout";
 import useCoords from "@/libs/client/useCoords";
+import { cls } from "@/libs/client/utils";
 import { Post, User } from "@prisma/client";
 import type { NextPage } from "next";
 import Head from "next/head";
@@ -53,7 +54,12 @@ const Community: NextPage = () => {
               <span>{post.longitude}</span> */}
             </div>
             <div className="flex space-x-5 mt-3 text-gray-700 py-2.5 border-t border-b-[2px] w-full">
-              <span className="flex space-x-2 items-center text-sm">
+              <span
+                className={cls(
+                  "flex space-x-2 items-center text-sm",
+                  post._count.wondering ? "text-emerald-400 font-bold" : ""
+                )}
+              >
                 <svg
                   className="w-4 h-4"
                   fill="none"
