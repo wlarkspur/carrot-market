@@ -21,13 +21,13 @@ const Post: NextPage<{ post: string; data: any }> = ({ post, data }) => {
 //getStaticPaths 함수는 Dynamic URL이 있는 페이지에서 getStaticProps를 쓸때 필요하다.
 
 export function getStaticPaths() {
-  const files = readdirSync("./posts").map((file) => {
+  /* const files = readdirSync("./posts").map((file) => {
     const [name, extenstion] = file.split(".");
     return { params: { slug: name } };
-  });
+  }); */
   return {
-    paths: files,
-    fallback: false,
+    paths: [],
+    fallback: "blocking",
   };
 }
 //NextJs ->  getStaticPaths(모든 slug)를 보고 getStaticProps를 호출한다. POINT** getStaticProps가 getStaticPaths 안에 있는 각각의 Paths들을

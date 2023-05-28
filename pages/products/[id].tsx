@@ -44,25 +44,31 @@ const ItemDetail: NextPage<ItemDetailResponse> = ({
     chatOpen({ productId: router.query.id });
   };
 
-  console.log("챗오픈 로그:", { data });
+  console.log("챗오픈 로그:", { product });
 
   //-----------------------------------------------------------
 
   const onFavClick = () => {
-    if (!data) return;
+    if (!product) return;
     boundMutate((prev) => prev && { ...prev, isLiked: !prev.isLiked }, false);
     //mutate("/api/users/me", (prev: any) => ({ ok: !prev.ok }), false);
     toggleFav({});
   };
-
+  if (router.isFallback) {
+    return (
+      <Layout title="Loading for you😘">
+        <span>I Love You😘</span>
+      </Layout>
+    );
+  }
   return (
     <Layout canGoBack seoTitle="Product Detail">
       <div className="px-4 py-10">
         <div className="mb-8">
           <div className="relative pb-80">
-            {data?.product.image ? (
+            {product.image ? (
               <Image
-                src={`https://imagedelivery.net/vb1hJxSPrA50SRWhJFXABQ/${data?.product?.image}/public`}
+                src={`https://imagedelivery.net/vb1hJxSPrA50SRWhJFXABQ/${product?.image}/public`}
                 className=" bg-slate-300 object-cover"
                 priority={true}
                 fill
@@ -74,12 +80,12 @@ const ItemDetail: NextPage<ItemDetailResponse> = ({
             )}
           </div>
           <div className=" flex cursor-pointer py-3 border-t border-b items-center space-x-3">
-            {data?.product.user.avatar ? (
+            {product.user.avatar ? (
               <Image
                 width={48}
                 height={48}
                 alt=""
-                src={`https://imagedelivery.net/vb1hJxSPrA50SRWhJFXABQ/${data?.product.user.avatar}/avatar`}
+                src={`https://imagedelivery.net/vb1hJxSPrA50SRWhJFXABQ/${product.user.avatar}/avatar`}
                 className="w-12 h-12 rounded-full bg-slate-300"
               />
             ) : (
@@ -87,9 +93,9 @@ const ItemDetail: NextPage<ItemDetailResponse> = ({
             )}
             <div>
               <p className="text-sm font-medium text-gray-700">
-                {data?.product?.user?.name}
+                {product?.user?.name}
               </p>
-              <Link href={`/profile/${data?.product?.user?.id}`} legacyBehavior>
+              <Link href={`/profile/${product?.user?.id}`} legacyBehavior>
                 <a className="text-xs- font-medium text-gray-500">
                   View profile &rarr;
                 </a>
@@ -98,18 +104,18 @@ const ItemDetail: NextPage<ItemDetailResponse> = ({
           </div>
           <div className="mt-5">
             <h1 className="text-3xl font-bold text-gray-900">
-              {data ? data?.product?.name : "???"}
+              {product ? product?.name : "???"}
             </h1>
             <span className="text-3xl block mt-3 text-gray-900">
-              ${data ? data?.product?.price : "???"}
+              ${product ? product?.price : "???"}
             </span>
             <p className="text-base my-6 text-gray-700">
-              {data ? data?.product?.description : "???"}
+              {product ? product?.description : "???"}
             </p>
             <div className="flex items-center justify-between space-x-2">
               <Button
                 onClick={chatOpenClick}
-                href={`/chats/${data?.product.id}`}
+                href={`/chats/${product.id}`}
                 text="Talk to seller"
               ></Button>
 
@@ -155,7 +161,7 @@ const ItemDetail: NextPage<ItemDetailResponse> = ({
         <div>
           <h2 className="text-2xl font-bold text-gray-900">Similar items</h2>
           <div className="grid mt-6 grid-cols-2 gap-4">
-            {data?.relatedProducts.map((product) => (
+            {relatedProducts.map((product) => (
               <Link href={`/products/${product.id}`} key={product.id}>
                 {product ? (
                   <div style={{ height: "200px" }}>
@@ -191,7 +197,7 @@ const ItemDetail: NextPage<ItemDetailResponse> = ({
 export const getStaticPaths: GetStaticPaths = () => {
   return {
     paths: [],
-    fallback: "blocking",
+    fallback: true,
   };
 };
 
@@ -231,6 +237,7 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
     },
   });
   const isLiked = false;
+  await new Promise((resolve) => setTimeout(resolve, 10000));
   return {
     props: {
       product: JSON.parse(JSON.stringify(product)),
