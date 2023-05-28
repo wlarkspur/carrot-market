@@ -41,7 +41,7 @@ export async function getStaticProps() {
     const [slug, _] = file.split(".");
     return { ...matter(content).data, slug };
   });
-  console.log(blogPosts);
+
   return {
     props: {
       posts: blogPosts,

@@ -161,7 +161,8 @@ const ItemDetail: NextPage = () => {
                       height={200}
                       style={{
                         objectFit: "cover",
-                        height: "100%",
+                        height: "auto",
+                        width: "auto",
                       }}
                     />
                   </div>
