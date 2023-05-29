@@ -9,6 +9,7 @@ import Image from "next/image";
 import Link from "next/link";
 import useSWR, { SWRConfig } from "swr";
 import client from "@/libs/server/client";
+import { useState } from "react";
 
 interface ReviewWithUser extends Review {
   createdBy: User;
@@ -22,6 +23,24 @@ interface ReviewsResponse {
 const Profile: NextPage = () => {
   const { user } = useUser();
   const { data } = useSWR<ReviewsResponse>("/api/reviews");
+  const [isLoading, setIsLoading] = useState(false);
+  const handleLogout = async () => {
+    try {
+      setIsLoading(true);
+      const response = await fetch("/api/users/logout", {
+        method: "POST",
+      });
+      if (response.ok) {
+        console.log("로그아웃 성공");
+      } else {
+        console.log("로그아웃 실패!!");
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
   return (
     <Layout seoTitle="Profile" title="" hasTabBar>
       <Head>
@@ -47,7 +66,11 @@ const Profile: NextPage = () => {
               <div className="text-sm text-gray-700">Edit profile &rarr;</div>
             </Link>
           </div>
-          <button className="flex items-center justify-end left-[210px] relative ">
+          <button
+            onClick={handleLogout}
+            disabled={isLoading}
+            className="flex items-center justify-end left-[210px] relative "
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"

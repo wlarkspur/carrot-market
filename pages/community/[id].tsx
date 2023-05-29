@@ -115,7 +115,7 @@ const CommunityPostDetail: NextPage<CommunityStaticResponse> = ({ post }) => {
   }
   const idMatch =
     post && post.length > 0 ? JSON.parse(JSON.stringify(post[0])) : null;
-  console.log(idMatch?.user?.name);
+
   return (
     <Layout canGoBack>
       <div>
