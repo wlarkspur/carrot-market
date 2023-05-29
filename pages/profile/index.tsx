@@ -33,7 +33,7 @@ const Profile: NextPage = () => {
         method: "POST",
       });
       if (response.ok) {
-        console.log("로그아웃 성공");
+        console.log("로그아웃 완료");
         router.push("/");
       } else {
         console.log("로그아웃 실패!!");
