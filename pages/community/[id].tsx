@@ -9,6 +9,7 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import useSWR from "swr";
+import client from "@/libs/server/client";
 
 interface AnswerWithUser extends Answer {
   user: User;
@@ -21,6 +22,28 @@ interface PostWithUser extends Post {
     wondering: number;
   };
   answers: AnswerWithUser[];
+}
+
+interface StaticUser {
+  id: number;
+  name: string;
+  avatart: string;
+}
+interface StaticCount {
+  answers: number;
+  wondering: number;
+}
+
+interface StaticWithFindFn extends Post {
+  [x: string]: any;
+  user: StaticUser;
+  _count: StaticCount;
+  answers: AnswerWithUser[];
+}
+
+interface CommunityStaticResponse {
+  post: StaticWithFindFn;
+  isWondering: boolean;
 }
 
 interface CommunityPostResponse {
@@ -38,7 +61,7 @@ interface AnswerResponse {
   response: Answer;
 }
 
-const CommunityPostDetail: NextPage = () => {
+const CommunityPostDetail: NextPage<CommunityStaticResponse> = ({ post }) => {
   const router = useRouter();
   const { register, handleSubmit, reset } = useForm<AnswerForm>();
   const { data, mutate, error } = useSWR<CommunityPostResponse>(
@@ -81,6 +104,18 @@ const CommunityPostDetail: NextPage = () => {
       mutate();
     }
   }, [answerData, reset, mutate]);
+
+  /* const matchPageId = post?.find(
+    (num: StaticWithFindFn) => num.id === Number(router.query.id)
+  ); */
+
+  if (post && post.length > 0) {
+    const idMatch = JSON.parse(JSON.stringify(post));
+    console.log(idMatch[0]);
+  }
+  const idMatch =
+    post && post.length > 0 ? JSON.parse(JSON.stringify(post[0])) : null;
+  console.log(idMatch?.user?.name);
   return (
     <Layout canGoBack>
       <div>
@@ -91,7 +126,8 @@ const CommunityPostDetail: NextPage = () => {
           <div className="w-10 h-10 rounded-full bg-slate-300" />
           <div>
             <p className="text-sm font-medium text-gray-700">
-              {data?.post?.user?.name}
+              {/* {data?.post?.user?.name} */}
+              {idMatch?.user?.name}
             </p>
             <Link
               href={`/users/profiles/${data?.post?.user?.id}`}
@@ -106,7 +142,7 @@ const CommunityPostDetail: NextPage = () => {
         <div className="px-4">
           <div className="mt-2 text-gray-600">
             <span className="text-orange-500 font-medium">Q.</span>
-            {data?.post?.question}
+            {idMatch?.question}
           </div>
         </div>
         <div className="flex px-4 space-x-5 mt-3 text-gray-700 py-2.5 border-t border-b-[2px] w-full">
@@ -131,7 +167,7 @@ const CommunityPostDetail: NextPage = () => {
                 d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
               ></path>
             </svg>
-            <span>궁금해요 {data?.post?._count?.wondering}</span>
+            <span>궁금해요 {idMatch?._count?.wondering}</span>
           </button>
           <div className="flex space-x-2 items-center text-sm">
             <svg
@@ -148,7 +184,7 @@ const CommunityPostDetail: NextPage = () => {
                 d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
               ></path>
             </svg>
-            <span>답변 {data?.post?._count?.answers}</span>
+            <span>답변 {idMatch?._count?.answers}</span>
           </div>
         </div>
 
@@ -193,8 +229,32 @@ export const getStaticPaths: GetStaticPaths = () => {
 };
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
+  const postId = ctx.params?.id;
+  console.log(ctx);
+  const post = await client.post.findMany({
+    where: {
+      id: Number(postId),
+    },
+    include: {
+      user: {
+        select: {
+          id: true,
+          name: true,
+          avatar: true,
+        },
+      },
+      _count: {
+        select: {
+          wondering: true,
+          answers: true,
+        },
+      },
+    },
+  });
   return {
-    props: {},
+    props: {
+      post: JSON.parse(JSON.stringify(post)),
+    },
   };
 };
 
