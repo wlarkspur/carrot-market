@@ -9,7 +9,8 @@ import Image from "next/image";
 import Link from "next/link";
 import useSWR, { SWRConfig } from "swr";
 import client from "@/libs/server/client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 
 interface ReviewWithUser extends Review {
   createdBy: User;
@@ -21,6 +22,7 @@ interface ReviewsResponse {
 }
 
 const Profile: NextPage = () => {
+  const router = useRouter();
   const { user } = useUser();
   const { data } = useSWR<ReviewsResponse>("/api/reviews");
   const [isLoading, setIsLoading] = useState(false);
@@ -32,6 +34,7 @@ const Profile: NextPage = () => {
       });
       if (response.ok) {
         console.log("로그아웃 성공");
+        router.push("/");
       } else {
         console.log("로그아웃 실패!!");
       }
@@ -41,6 +44,7 @@ const Profile: NextPage = () => {
       setIsLoading(false);
     }
   };
+
   return (
     <Layout seoTitle="Profile" title="" hasTabBar>
       <Head>
