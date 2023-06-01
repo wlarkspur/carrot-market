@@ -24,7 +24,7 @@ function Coin({ id, name, symbol }: any) {
   console.log(price);
   return (
     <span>
-      {name} / {symbol}: ${price}
+      {name} / {symbol}: ${price.toFixed(2)}
     </span>
   );
 }

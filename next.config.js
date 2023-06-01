@@ -3,8 +3,8 @@ const nextConfig = {
   reactStrictMode: true,
   experimental: {
     reactRoot: true,
-    runtime: "node.js",
-    severCompnents: true,
+    /* runtime: "node.js",
+    severCompnents: true, */
   },
   images: {
     domains: ["imagedelivery.net", "videodelivery.net"],
