@@ -1,11 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  experimental: {
+  /* experimental: {
     reactRoot: true,
-    /* runtime: "node.js",
-    severCompnents: true, */
-  },
+    runtime: "node.js",
+    severCompnents: true,
+  }, */
   images: {
     domains: ["imagedelivery.net", "videodelivery.net"],
   },
