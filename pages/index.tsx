@@ -28,7 +28,7 @@ const Home: NextPage = () => {
   return (
     <Layout seoTitle="Home" title="Home" hasTabBar>
       <Head>
-        <title>Home</title>
+        <title>Home Sweet</title>
       </Head>
       <div className="flex flex-col space-y-5 pt-3">
         {data
