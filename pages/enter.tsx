@@ -100,7 +100,7 @@ const Enter: NextPage = () => {
                   Email
                 </button>
                 <button
-                  disabled={true}
+                  disabled={false}
                   className={cls(
                     "pb-4 font-bold border-b-2",
                     method === "phone"
