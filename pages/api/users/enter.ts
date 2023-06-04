@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import withHandler, { ResponseType } from "@/libs/server/withHandlers";
 import client from "@/libs/server/client";
 import twilio from "twilio";
+import smtpTransport from "@/libs/server/email";
 
 const twilioClient = twilio(process.env.TWILIO_SID, process.env.TWILIO_TOKEN);
 
@@ -30,16 +31,16 @@ async function handler(
     },
   });
   if (phone) {
-    /* const message = await twilioClient.messages.create({
+    const message = await twilioClient.messages.create({
       messagingServiceSid: process.env.TWILIO_MSID,
       to: process.env.MY_PHONE!,
       body: `Your login token is ${payload}.`,
     });
-    console.log(message); */
+    console.log(message);
   } else if (email) {
-    /* const mailOptions = {
+    const mailOptions = {
       from: `${process.env.MAIL_ID}@naver.com`,
-      to: `${process.env.MAIL_ID}@naver.com`,
+      to: email /* `${process.env.MAIL_ID}@naver.com`, */,
       subject: "Nomad Carrot Authentication Email",
       text: `Authentication Code : ${payload}`,
     };
@@ -56,7 +57,7 @@ async function handler(
       }
     );
     smtpTransport.close();
-    console.log(result); */
+    console.log(result);
   }
   return res.json({
     ok: true,
